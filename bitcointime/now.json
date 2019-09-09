@@ -1,8 +1,8 @@
 {
     "build": {
       "env": {
-        "VUE_APP_API_KEY": "@VUE_APP_API_KEY",
-        "VUE_APP_API_URL": "@VUE_APP_API_URL"
+        "VUE_APP_API_KEY": "@vue_app_api_key",
+        "VUE_APP_API_URL": "@vue_app_api_url"
       }
     }
   }
