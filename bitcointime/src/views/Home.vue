@@ -37,6 +37,7 @@ var config = {
   headers: { 'key' : process.env.VUE_APP_API_KEY }
 };
 var genesisTime = (1231006505);
+var genesisFromUnixTime = fromUnixTime(genesisTime)
 // eslint-disable-next-line no-console
 console.log('genesisTime is: ', genesisTime);
 export default {
@@ -108,19 +109,24 @@ export default {
     }
 },
     timeSinceGenesis() {
+    // eslint-disable-next-line no-console
+    console.log('genesisFromUnixTime is: ', genesisFromUnixTime);
     var now = new Date();
-    var genesisDateTime = fromUnixTime(genesisTime)
-    var years = differenceInCalendarYears(now, genesisDateTime)
+    var years = differenceInCalendarYears(now, genesisFromUnixTime)
     var timeYearsAgo = subYears(now, years);
-    var months = differenceInCalendarMonths(timeYearsAgo, genesisDateTime)
+    var months = differenceInCalendarMonths(timeYearsAgo, genesisFromUnixTime)
     var timeMonthsAgo = subMonths(timeYearsAgo, months);
-    var days = differenceInCalendarDays(timeMonthsAgo, genesisDateTime);
-    var timeDaysAgo = subDays(timeMonthsAgo, days);
-    var hours = differenceInHours(timeDaysAgo, genesisDateTime);
+    // eslint-disable-next-line no-console
+    console.log('timemonthsago is: ', timeMonthsAgo);
+    var days = differenceInCalendarDays(timeMonthsAgo, genesisFromUnixTime);
+    var timeDaysAgo = subDays(timeMonthsAgo, (days-1));
+    // eslint-disable-next-line no-console
+    console.log('timeDaysAgo is: ', timeDaysAgo);
+    var hours = differenceInHours(timeDaysAgo, genesisFromUnixTime);
     var timeHoursAgo = subHours(timeDaysAgo, hours);
-    var minutes = differenceInMinutes(timeHoursAgo, genesisDateTime);
+    var minutes = differenceInMinutes(timeHoursAgo, genesisFromUnixTime);
     var timeMinutesAgo = subMinutes(timeHoursAgo, minutes);
-    var seconds = differenceInSeconds(timeMinutesAgo, genesisDateTime);
+    var seconds = differenceInSeconds(timeMinutesAgo, genesisFromUnixTime);
     // var timeSecondsAgo = subSeconds(timeMinutesAgo, seconds);
     return years + ' years, ' + months + ' months, ' + days + ' days, ' + hours + ' hours, ' + minutes + ' minutes, ' + seconds + ' seconds'
 },
