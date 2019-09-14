@@ -4,9 +4,9 @@
     <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
     <h1>Bitcoin Time</h1>
     <p>
-      It's been
-      <strong>{{ timeSinceGenesis }}</strong>
-      since the Genesis Block
+      <strong>{{ timeSinceGenesis }}</strong
+      ><br />
+      since the Bitcoin Genesis Block
     </p>
     <p>The current block height is: {{ blockHeight }}</p>
     <p>
@@ -34,10 +34,11 @@ import {
   differenceInSeconds,
   fromUnixTime,
   subDays,
-  subHours,
-  subMinutes,
-  subMonths,
-  subYears
+  addYears,
+  addDays,
+  addMinutes,
+  addMonths,
+  addHours
 } from "date-fns";
 var query = {
   v: 3,
@@ -116,72 +117,77 @@ export default {
       console.log(
         `the Bitcoin Genesis Block was mined on: ${genesisFromUnixTime}`
       );
-      var now = new Date();
+      let now = new Date();
       console.log("The date/time is: ", now);
       var years = differenceInCalendarYears(now, genesisFromUnixTime);
       console.log(
         `It's been at least ${years} years since the Bitcoin Genesis Block"`
       );
-      var timeYearsAgo = subYears(now, years);
-      console.log(`The time after ${years} years ago is ${timeYearsAgo}`);
-
-      var months = differenceInCalendarMonths(
-        timeYearsAgo,
-        genesisFromUnixTime
+      var timeYearsAgo = addYears(genesisFromUnixTime, years);
+      console.log(
+        `${years} years after the Bitcoin Genesis Block the time/date was: ${timeYearsAgo}`
       );
+
+      var months = differenceInCalendarMonths(now, timeYearsAgo);
+
+      console.log(`The number of months between then and now is: ${months}`);
+
+      var timeMonthsAgo = addMonths(timeYearsAgo, months);
+      console.log(
+        `${years} years, ${months} months after the Bitcoin Genesis Block the time/date was: ${timeMonthsAgo}`
+      );
+
+      var days = differenceInCalendarDays(now, timeMonthsAgo);
+
+      console.log(`The number of days between then and now is: ${days}`);
+
+      let timeDaysAgo = addDays(timeMonthsAgo, days);
 
       console.log(
-        `The number of months between ${years} years ago and when the Bitcoin Genesis Block was mined is at least: ${months}
-      `
+        `${years} years, ${months} months, ${days} days after the Bitcoin Genesis Block the time/date was: ${timeDaysAgo}`
       );
 
-      var timeMonthsAgo = subMonths(timeYearsAgo, months);
-      console.log(
-        "The time after " +
-          years +
-          " years " +
-          months +
-          " months ago is " +
-          timeMonthsAgo
-      );
+      let hours = differenceInHours(now, timeDaysAgo);
 
-      var days = differenceInCalendarDays(timeMonthsAgo, genesisFromUnixTime);
+      if (hours < 0) {
+        days -= 1;
+        timeDaysAgo = subDays(timeDaysAgo, 1);
+        hours = differenceInHours(now, timeDaysAgo);
+      }
 
       console.log(
-        `The number of days between ${years} years, ${months} months ago and when the Bitcoin Genesis Block was mined is at least: ${days}.`
+        `${years} years, ${months} months, ${days} days after the Bitcoin Genesis Block the time/date was: ${timeDaysAgo}`
       );
-
-      var timeDaysAgo = subDays(timeMonthsAgo, days);
 
       console.log(
         `The time after ${years} years, ${months} months & ${days} days and when the Bitcoin Genesis Block was mined is: ${timeDaysAgo}.`
       );
 
-      var hours = differenceInHours(timeDaysAgo, genesisFromUnixTime);
-
       console.log(
         `The number of hours between ${years} years, ${months} months and ${days} days ago and when the Bitcoin Genesis Block was mined is at least: ${hours}.`
       );
 
-      var timeHoursAgo = subHours(timeDaysAgo, hours);
+      console.log(`hours are: ${hours}`);
+
+      var timeHoursAgo = addHours(timeDaysAgo, hours);
 
       console.log(
         `The time after ${years} years, ${months} months, ${days} days & ${hours} hours and when the Bitcoin Genesis Block was mined is: ${timeHoursAgo}.`
       );
 
-      var minutes = differenceInMinutes(timeHoursAgo, genesisFromUnixTime);
+      var minutes = differenceInMinutes(now, timeHoursAgo);
 
       console.log(
         `The number of minutes between ${years} years, ${months} months, & ${days} days ago and when the Bitcoin Genesis Block was mined is at least: ${minutes}.`
       );
 
-      var timeMinutesAgo = subMinutes(timeHoursAgo, minutes);
+      var timeMinutesAgo = addMinutes(timeHoursAgo, minutes);
 
       console.log(
         `The time after ${years} years, ${months} months, ${days} days ${hours} hours & ${minutes} minutes and when the Bitcoin Genesis Block was mined is: ${timeMinutesAgo}.`
       );
 
-      var seconds = differenceInSeconds(timeMinutesAgo, genesisFromUnixTime);
+      var seconds = differenceInSeconds(now, timeMinutesAgo);
 
       console.log(
         `The number of seconds between ${years} years, ${months} months, ${days} days ago & ${minutes} ago and when the Bitcoin Genesis Block was mined is at least: ${seconds}.`
