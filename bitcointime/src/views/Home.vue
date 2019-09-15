@@ -108,7 +108,7 @@ export default {
       } else if (seconds > 120) {
         return Math.floor(seconds / 60) + " minutes ago";
       } else if (seconds > 60) {
-        return Math.floor(seconds / 60) + " 1 minute ago";
+        return Math.floor(seconds / 60) + " minute ago";
       } else {
         return seconds + " seconds ago";
       }
