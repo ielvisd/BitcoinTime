@@ -103,8 +103,6 @@ export default {
         return "yesterday";
       } else if (seconds > 3600) {
         return "a few hours ago";
-      } else if (seconds > 1800) {
-        return "Half an hour ago";
       } else if (seconds > 120) {
         return Math.floor(seconds / 60) + " minutes ago";
       } else if (seconds > 60) {
