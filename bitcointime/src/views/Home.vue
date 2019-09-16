@@ -17,6 +17,21 @@
       Current date/time is:
       {{ formatDateTime }}
     </p>
+    <div class="money-button-container">
+      <MoneyButton
+        class="money-button"
+        to="9338"
+        amount="0.5"
+        currency="USD"
+        label="Coffee & Dog Treats"
+        client-identifier="7abb533316d7a3c5804aa83201a3e29b"
+        button-id="1568596625967"
+        button-data="{}"
+        type="tip"
+        @payment="handlePayment"
+      />
+      <p class="money-button-under">Coffee & Dog Treats 🙂</p>
+    </div>
   </div>
 </template>
 
@@ -25,6 +40,7 @@
 // import HelloWorld from '@/components/HelloWorld.vue'
 
 import axios from "axios";
+import MoneyButton from "vue-money-button";
 import {
   differenceInCalendarDays,
   differenceInCalendarMonths,
@@ -54,7 +70,7 @@ var genesisFromUnixTime = fromUnixTime(genesisTime);
 console.log("genesisTime is: ", genesisTime);
 export default {
   name: "App",
-  components: {},
+  components: { MoneyButton },
   data() {
     return {
       info: null,
@@ -208,11 +224,29 @@ export default {
 
 <style>
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  -webkit-font-smoothing: antialiased;
   color: #2c3e50;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   margin-top: 60px;
+  text-align: center;
+  width: 100%;
+}
+
+.money-button-container {
+  margin: 0 auto;
+  max-width: 150px;
+  position: relative;
+}
+
+.money-button {
+  position: absolute;
+  max-width: 100px;
+  margin-top: 20px;
+  margin-left: -54px;
+}
+
+.money-button-under {
+  font-size: 12px;
 }
 </style>
