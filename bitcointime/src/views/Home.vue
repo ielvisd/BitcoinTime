@@ -28,6 +28,7 @@
         button-id="1568596625967"
         button-data="{}"
         type="tip"
+        editable="true"
         @payment="handlePayment"
       />
     </div>
