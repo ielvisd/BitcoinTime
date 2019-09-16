@@ -30,7 +30,6 @@
         type="tip"
         @payment="handlePayment"
       />
-      <p class="money-button-under">Coffee & Dog Treats 🙂</p>
     </div>
   </div>
 </template>
@@ -236,17 +235,10 @@ export default {
 .money-button-container {
   margin: 0 auto;
   max-width: 150px;
-  position: relative;
 }
 
 .money-button {
-  position: absolute;
   max-width: 100px;
-  margin-top: 20px;
   margin-left: -54px;
-}
-
-.money-button-under {
-  font-size: 12px;
 }
 </style>
