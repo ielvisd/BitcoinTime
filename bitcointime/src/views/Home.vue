@@ -4,9 +4,8 @@
     <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
     <h1>Bitcoin Time</h1>
     <p>
-      <strong>{{ timeSinceGenesis }}</strong
-      ><br />
-      since the Bitcoin Genesis Block
+      <strong>{{ timeSinceGenesis }}</strong>
+      <br />since the Bitcoin Genesis Block
     </p>
     <p>The current block height is: {{ blockHeight }}</p>
     <p>
@@ -54,7 +53,8 @@ import {
   addDays,
   addMinutes,
   addMonths,
-  addHours
+  addHours,
+  addSeconds
 } from "date-fns";
 var query = {
   v: 3,
@@ -75,11 +75,12 @@ export default {
     return {
       info: null,
       time: "",
-      blockNumber: ""
+      blockNumber: "",
+      currentTime: new Date()
     };
   },
   computed: {
-    blockTime: function() {
+    blockTime() {
       if (this.info === null) {
         return;
       } else {
@@ -87,7 +88,7 @@ export default {
         return time.t;
       }
     },
-    blockHeight: function() {
+    blockHeight() {
       if (this.info === null) {
         return;
       } else {
@@ -95,7 +96,7 @@ export default {
         return time.i;
       }
     },
-    timeSinceDiscovered: function() {
+    timeSinceDiscovered() {
       if (this.info === null) {
         return;
       } else {
@@ -127,93 +128,187 @@ export default {
         return seconds + " seconds ago";
       }
     },
+    calendarYearsSinceGenesis() {
+      console.log("the currentTime is: ", this.currentTime);
+
+      let years = differenceInCalendarYears(
+        this.currentTime,
+        genesisFromUnixTime
+      );
+      console.log("calendarYearsSinceGenesis are: ", years);
+      return years;
+    },
+    timeAtCalendarYearsSinceGenesis() {
+      let timeYearsAgo = addYears(
+        genesisFromUnixTime,
+        this.calendarYearsSinceGenesis
+      );
+      console.log(`timeAtCalendarYearsSinceGenesis was: ${timeYearsAgo}`);
+      return timeYearsAgo;
+    },
+    calendarMonthsAfterYearsSinceGenesis() {
+      let months = differenceInCalendarMonths(
+        this.currentTime,
+        this.timeAtCalendarYearsSinceGenesis
+      );
+      console.log("calendarMonthsAfterYearsSinceGenesis are: ", months);
+      return months;
+    },
+    timeAtCalendarMonthsPlusYearsSinceGenesis() {
+      let timeMonthsAgo = addMonths(
+        this.timeAtCalendarYearsSinceGenesis,
+        this.calendarMonthsAfterYearsSinceGenesis
+      );
+      console.log(
+        `timeAtCalendarMonthsPlusYearsSinceGenesis was: ${timeMonthsAgo}`
+      );
+      return timeMonthsAgo;
+    },
+    calendarDaysAfterMonthsAndYearsSinceGenesis() {
+      let days = differenceInCalendarDays(
+        this.currentTime,
+        this.timeAtCalendarMonthsPlusYearsSinceGenesis
+      );
+      console.log("calendarDaysAfterMonthsAndYearsSinceGenesis are: ", days);
+      return days;
+    },
+    timeAtCalendarDaysAfterMonthsAndYearsSinceGenesis() {
+      let timeDaysAgo = addDays(
+        this.timeAtCalendarMonthsPlusYearsSinceGenesis,
+        this.calendarDaysAfterMonthsAndYearsSinceGenesis
+      );
+      console.log(
+        `timeAtCalendarDaysAfterMonthsAndYearsSinceGenesis was: ${timeDaysAgo}`
+      );
+      return timeDaysAgo;
+    },
+    hoursAfterDaysMonthsAndYearsSinceGenesis() {
+      let hours = differenceInHours(
+        this.currentTime,
+        this.timeAtCalendarDaysAfterMonthsAndYearsSinceGenesis
+      );
+      console.log("hoursAfterDaysMonthsAndYearsSinceGenesis are: ", hours);
+      return hours;
+    },
+    timeAtHoursAfterDaysMonthsAndYearsSinceGenesis() {
+      let timeHoursAgo = addHours(
+        this.timeAtCalendarDaysAfterMonthsAndYearsSinceGenesis,
+        this.hoursAfterDaysMonthsAndYearsSinceGenesis
+      );
+      console.log(
+        `timeAtHoursAfterDaysMonthsAndYearsSinceGenesis was: ${timeHoursAgo}`
+      );
+      return timeHoursAgo;
+    },
+    minutesAfterHoursDaysMonthsAndYearsSinceGenesis() {
+      let minutes = differenceInMinutes(
+        this.currentTime,
+        this.timeAtHoursAfterDaysMonthsAndYearsSinceGenesis
+      );
+      console.log(
+        "minutesAfterHoursDaysMonthsAndYearsSinceGenesis are: ",
+        minutes
+      );
+      return minutes;
+    },
+    timeAtMinutesAfterHoursDaysMonthsAndYearsSinceGenesis() {
+      let timeMinutesAgo = addMinutes(
+        this.timeAtHoursAfterDaysMonthsAndYearsSinceGenesis,
+        this.minutesAfterHoursDaysMonthsAndYearsSinceGenesis
+      );
+      console.log(
+        `timeAtMinutesAfterHoursDaysMonthsAndYearsSinceGenesis was: ${timeMinutesAgo}`
+      );
+      return timeMinutesAgo;
+    },
+    secondsAfterMinutesHoursDaysMonthsAndYearsSinceGenesis() {
+      let seconds = differenceInSeconds(
+        this.currentTime,
+        this.timeAtMinutesAfterHoursDaysMonthsAndYearsSinceGenesis
+      );
+      console.log(
+        "secondsAfterMinutesHoursDaysMonthsAndYearsSinceGenesis are: ",
+        seconds
+      );
+      return seconds;
+    },
+    timeAtSecondsAfterMinutesHoursDaysMonthsAndYearsSinceGenesis() {
+      let timeSecondsAgo = addSeconds(
+        this.timeAtMinutesAfterHoursDaysMonthsAndYearsSinceGenesis,
+        this.secondsAfterMinutesHoursDaysMonthsAndYearsSinceGenesis
+      );
+      console.log(
+        `timeAtSecondsAfterMinutesHoursDaysMonthsAndYearsSinceGenesis was: ${timeSecondsAgo}`
+      );
+      return timeSecondsAgo;
+    },
+
     timeSinceGenesis() {
       console.log(
         `the Bitcoin Genesis Block was mined on: ${genesisFromUnixTime}`
       );
-      let now = new Date();
-      console.log("The date/time is: ", now);
-      var years = differenceInCalendarYears(now, genesisFromUnixTime);
-      console.log(
-        `It's been at least ${years} years since the Bitcoin Genesis Block"`
-      );
-      var timeYearsAgo = addYears(genesisFromUnixTime, years);
-      console.log(
-        `${years} years after the Bitcoin Genesis Block the time/date was: ${timeYearsAgo}`
-      );
 
-      var months = differenceInCalendarMonths(now, timeYearsAgo);
+      let years = this.calendarYearsSinceGenesis;
 
-      console.log(`The number of months between then and now is: ${months}`);
+      let months = this.calendarMonthsAfterYearsSinceGenesis;
 
-      var timeMonthsAgo = addMonths(timeYearsAgo, months);
-      console.log(
-        `${years} years, ${months} months after the Bitcoin Genesis Block the time/date was: ${timeMonthsAgo}`
-      );
+      let days = this.calendarDaysAfterMonthsAndYearsSinceGenesis;
 
-      var days = differenceInCalendarDays(now, timeMonthsAgo);
+      let hours = this.hoursAfterDaysMonthsAndYearsSinceGenesis;
 
-      console.log(`The number of days between then and now is: ${days}`);
+      let minutes = this.minutesAfterHoursDaysMonthsAndYearsSinceGenesis;
 
-      let timeDaysAgo = addDays(timeMonthsAgo, days);
+      let seconds = this.secondsAfterMinutesHoursDaysMonthsAndYearsSinceGenesis;
 
-      console.log(
-        `${years} years, ${months} months, ${days} days after the Bitcoin Genesis Block the time/date was: ${timeDaysAgo}`
-      );
+      // Should be the same as currentTime
+      let finalTime = this
+        .timeAtSecondsAfterMinutesHoursDaysMonthsAndYearsSinceGenesis;
 
-      let hours = differenceInHours(now, timeDaysAgo);
+      console.log("finalTime is: ", finalTime);
 
+      // if the hours are negative, then adjust everything from days down
       if (hours < 0) {
+        console.log("1 Day off Adjustment");
+        // subtract 1 day
         days -= 1;
-        timeDaysAgo = subDays(timeDaysAgo, 1);
-        hours = differenceInHours(now, timeDaysAgo);
+
+        // get a new time for DaysAgo
+        let timeDaysAgo = subDays(
+          this.timeAtCalendarDaysAfterMonthsAndYearsSinceGenesis,
+          1
+        );
+        console.log("timeDaysAgo is: ", timeDaysAgo);
+
+        // Adjust hours based on this new Time
+        hours = differenceInHours(this.currentTime, timeDaysAgo);
+        console.log("hours are: ", hours);
+
+        // Get new timeHoursAgo, add hours to new timeDaysAgo
+        let timeHoursAgo = addHours(timeDaysAgo, hours);
+        console.log("timeHoursAgo is: ", timeHoursAgo);
+
+        minutes = differenceInMinutes(this.currentTime, timeHoursAgo);
+        console.log("minutes are: ", minutes);
+
+        let timeMinutesAgo = addMinutes(timeHoursAgo, minutes);
+        console.log("timeMinutesAgo is: ", timeMinutesAgo);
+
+        seconds = differenceInSeconds(this.currentTime, timeMinutesAgo);
+        console.log("minutes are: ", seconds);
       }
-
-      console.log(
-        `${years} years, ${months} months, ${days} days after the Bitcoin Genesis Block the time/date was: ${timeDaysAgo}`
-      );
-
-      console.log(
-        `The time after ${years} years, ${months} months & ${days} days and when the Bitcoin Genesis Block was mined is: ${timeDaysAgo}.`
-      );
-
-      console.log(
-        `The number of hours between ${years} years, ${months} months and ${days} days ago and when the Bitcoin Genesis Block was mined is at least: ${hours}.`
-      );
-
-      console.log(`hours are: ${hours}`);
-
-      var timeHoursAgo = addHours(timeDaysAgo, hours);
-
-      console.log(
-        `The time after ${years} years, ${months} months, ${days} days & ${hours} hours and when the Bitcoin Genesis Block was mined is: ${timeHoursAgo}.`
-      );
-
-      var minutes = differenceInMinutes(now, timeHoursAgo);
-
-      console.log(
-        `The number of minutes between ${years} years, ${months} months, & ${days} days ago and when the Bitcoin Genesis Block was mined is at least: ${minutes}.`
-      );
-
-      var timeMinutesAgo = addMinutes(timeHoursAgo, minutes);
-
-      console.log(
-        `The time after ${years} years, ${months} months, ${days} days ${hours} hours & ${minutes} minutes and when the Bitcoin Genesis Block was mined is: ${timeMinutesAgo}.`
-      );
-
-      var seconds = differenceInSeconds(now, timeMinutesAgo);
-
-      console.log(
-        `The number of seconds between ${years} years, ${months} months, ${days} days ago & ${minutes} ago and when the Bitcoin Genesis Block was mined is at least: ${seconds}.`
-      );
 
       return `${years} years ${months} months ${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`;
     },
     formatDateTime: function() {
       var thisDateTime = new Date();
       return thisDateTime.toLocaleString();
+    },
+    handlePayment() {
+      console.log("Paid!");
+      return true;
     }
   },
+
   mounted() {
     axios
       .get(url, config)
