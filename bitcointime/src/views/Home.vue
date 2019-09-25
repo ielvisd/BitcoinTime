@@ -2,19 +2,48 @@
   <div class="home">
     <!-- <img alt="Vue logo" src="../assets/logo.png"> -->
     <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
-    <h1>Bitcoin Time</h1>
+    <h1 class="title">BitcoinSV Time</h1>
+
+    <div class="units">
+      <div class="unit-and-value">
+        <span class="cu-unit">{{ timeSinceGenesis.years }}</span>
+        <span class="unit">years</span>
+      </div>
+      <div class="unit-and-value">
+        <span class="cu-unit">{{ timeSinceGenesis.months }}</span>
+        <span class="unit">months</span>
+      </div>
+      <div class="unit-and-value">
+        <span class="cu-unit">{{ timeSinceGenesis.days }}</span>
+        <span class="unit">days</span>
+      </div>
+      <div class="unit-and-value">
+        <span class="cu-unit">{{ timeSinceGenesis.hours }}</span>
+        <span class="unit">hours</span>
+      </div>
+      <div class="unit-and-value">
+        <span class="cu-unit">{{ timeSinceGenesis.minutes }}</span>
+        <span class="unit">minutes</span>
+      </div>
+      <div class="unit-and-value">
+        <span class="cu-unit">{{ timeSinceGenesis.seconds }}</span>
+        <span class="unit">seconds</span>
+      </div>
+    </div>
+    <br />since the Bitcoin Genesis Block
     <p>
-      <strong>{{ timeSinceGenesis }}</strong>
-      <br />since the Bitcoin Genesis Block
+      The current block height is:
+      <span class="computed-unit">{{ blockHeight }}</span>
     </p>
-    <p>The current block height is: {{ blockHeight }}</p>
     <p>
-      Block #{{ blockHeight - 1 }} was found:
-      {{ time2TimeAgo }}
+      Block #
+      <span class="computed-unit">{{ blockHeight - 1 }}</span>
+      was found:
+      <span class="computed-unit">{{ time2TimeAgo }}</span>
     </p>
     <p>
       Current date/time is:
-      {{ formatDateTime }}
+      <span class="computed-unit">{{ formatDateTime }}</span>
     </p>
     <div class="money-button-container">
       <MoneyButton
@@ -22,7 +51,7 @@
         to="9338"
         amount="0.5"
         currency="USD"
-        label="Coffee & Dog Treats"
+        label="Pizza"
         client-identifier="7abb533316d7a3c5804aa83201a3e29b"
         button-id="1568596625967"
         button-data="{}"
@@ -109,7 +138,9 @@ export default {
       // provided timestamp and the current time, then test
       // the delta for predefined ranges.
       var d = new Date(); // Gets the current time
-      var nowTs = Math.floor(d.getTime() / 1000); // getTime() returns milliseconds, and we need seconds, hence the Math.floor and division by 1000
+      var nowTs = Math.floor(d.getTime() / 1000);
+      // getTime() returns milliseconds, and we need seconds, hence the
+      // Math.floor and division by 1000
       var seconds = nowTs - this.timeSinceDiscovered;
       // more that two days
       if (seconds > 2 * 24 * 3600) {
@@ -200,6 +231,14 @@ export default {
       );
       return timeHoursAgo;
     },
+    minutesAfterDaysMonthsAndYearsSinceGenesis() {
+      let minutes = differenceInMinutes(
+        this.currentTime,
+        this.timeAtCalendarDaysAfterMonthsAndYearsSinceGenesis
+      );
+      console.log("minutesAfterDaysMonthsAndYearsSinceGenesis are: ", minutes);
+      return minutes;
+    },
     minutesAfterHoursDaysMonthsAndYearsSinceGenesis() {
       let minutes = differenceInMinutes(
         this.currentTime,
@@ -266,45 +305,67 @@ export default {
 
       console.log("finalTime is: ", finalTime);
 
-      // if the hours are negative, then adjust everything from days down
-      if (hours < 0) {
-        console.log("1 Day off Adjustment");
-        // subtract 1 day
-        days -= 1;
+      console.log("hours are: ", hours);
 
-        // get a new time for DaysAgo
-        let timeDaysAgo = subDays(
-          this.timeAtCalendarDaysAfterMonthsAndYearsSinceGenesis,
-          1
-        );
-        console.log("timeDaysAgo is: ", timeDaysAgo);
+      // if the hours are negative or zero then we have to check the minutes
+      // because hours between -1 and 1 return -0 or 0,
+      if (hours <= 0) {
+        // Check the minutes here
+        minutes = this.minutesAfterDaysMonthsAndYearsSinceGenesis;
 
-        // Adjust hours based on this new Time
-        hours = differenceInHours(this.currentTime, timeDaysAgo);
-        console.log("hours are: ", hours);
+        // if minutes are negative the calendarDay calculation went too far
+        // in the future so adjust everything by a day
+        if (minutes < 0) {
+          console.log("1 Day off Adjustment");
+          // subtract 1 day
+          days -= 1;
 
-        // Get new timeHoursAgo, add hours to new timeDaysAgo
-        let timeHoursAgo = addHours(timeDaysAgo, hours);
-        console.log("timeHoursAgo is: ", timeHoursAgo);
+          // get a new time for DaysAgo
+          let timeDaysAgo = subDays(
+            this.timeAtCalendarDaysAfterMonthsAndYearsSinceGenesis,
+            1
+          );
+          console.log("Adjusted timeDaysAgo is: ", timeDaysAgo);
 
-        minutes = differenceInMinutes(this.currentTime, timeHoursAgo);
-        console.log("minutes are: ", minutes);
+          // Adjust hours based on this new Time
+          hours = differenceInHours(this.currentTime, timeDaysAgo);
+          console.log("Adjusted hours are: ", hours);
 
-        let timeMinutesAgo = addMinutes(timeHoursAgo, minutes);
-        console.log("timeMinutesAgo is: ", timeMinutesAgo);
+          // Get new timeHoursAgo, add hours to new timeDaysAgo
+          let timeHoursAgo = addHours(timeDaysAgo, hours);
+          console.log("Adjusted timeHoursAgo is: ", timeHoursAgo);
 
-        seconds = differenceInSeconds(this.currentTime, timeMinutesAgo);
-        console.log("minutes are: ", seconds);
+          minutes = differenceInMinutes(this.currentTime, timeHoursAgo);
+          console.log("Adjusted minutes are: ", minutes);
+
+          let timeMinutesAgo = addMinutes(timeHoursAgo, minutes);
+          console.log("Adjusted timeMinutesAgo is: ", timeMinutesAgo);
+
+          seconds = differenceInSeconds(this.currentTime, timeMinutesAgo);
+          console.log("Adjusted minutes are: ", seconds);
+
+          return `${years} years ${months} months ${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`;
+        }
       }
 
-      return `${years} years ${months} months ${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`;
+      let bitcoinTime = {
+        years: years,
+        months: months,
+        days: days,
+        hours: hours,
+        minutes: minutes,
+        seconds: seconds
+      };
+
+      return bitcoinTime;
     },
+
     formatDateTime: function() {
       var thisDateTime = new Date();
       return thisDateTime.toLocaleString();
     },
     handlePayment() {
-      console.log("Paid!");
+      console.log("Test");
       return true;
     }
   },
@@ -321,11 +382,41 @@ export default {
 #app {
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
-  color: #2c3e50;
+  background: #1d1919;
+  color: rgba(255, 255, 255, 0.7);
   font-family: "Avenir", Helvetica, Arial, sans-serif;
-  margin-top: 60px;
   text-align: center;
   width: 100%;
+  height: 100vh;
+}
+
+.title,
+.computed-unit {
+  color: #ee75ad;
+  font-weight: bold;
+  padding-top: 60px;
+}
+
+.calculated-units,
+.units {
+  display: flex;
+  justify-content: center;
+}
+
+.units {
+  display: flex;
+}
+
+.unit-and-value {
+  display: flex;
+  flex-direction: column;
+  margin-right: 20px;
+}
+
+.cu-unit {
+  color: #ee75ad;
+  font-weight: bold;
+  margin-right: 4px;
 }
 
 .money-button-container {
