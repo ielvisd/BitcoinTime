@@ -344,7 +344,16 @@ export default {
           seconds = differenceInSeconds(this.currentTime, timeMinutesAgo);
           console.log("Adjusted minutes are: ", seconds);
 
-          return `${years} years ${months} months ${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`;
+          let bitcoinTime = {
+            years: years,
+            months: months,
+            days: days,
+            hours: hours,
+            minutes: minutes,
+            seconds: seconds
+          };
+
+          return bitcoinTime;
         }
       }
 
