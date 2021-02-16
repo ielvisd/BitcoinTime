@@ -29,8 +29,9 @@
         <span class="cu-unit">{{ timeSinceGenesis.seconds }}</span>
         <span class="unit">seconds</span>
       </div>
+      <p class="sinceWhen">since the Bitcoin Genesis Block</p>
     </div>
-    <br />since the Bitcoin Genesis Block
+
     <p>
       The current block height is:
       <span class="computed-unit">{{ blockHeight }}</span>
@@ -403,7 +404,7 @@ export default {
 .computed-unit {
   color: #ee75ad;
   font-weight: bold;
-  padding-top: 60px;
+  /* padding-top: 60px; */
 }
 
 .calculated-units,
@@ -414,18 +415,30 @@ export default {
 
 .units {
   display: flex;
+  flex-wrap: wrap;
+
+  @media min-width:768px {
+    border: 1px solid red;
+  }
 }
 
 .unit-and-value {
   display: flex;
   flex-direction: column;
-  margin-right: 20px;
+  margin: 0 auto;
+  width: 30%;
+  margin-bottom: 16px;
 }
 
 .cu-unit {
   color: #ee75ad;
   font-weight: bold;
   margin-right: 4px;
+}
+
+.sinceWhen {
+  margin: 0 auto;
+  margin-bottom: 16px;
 }
 
 .money-button-container {
