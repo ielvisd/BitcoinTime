@@ -3,12 +3,15 @@
   <ClientOnly>
     <div class="min-h-screen flex items-center justify-center futuristic-bg">
       <div class="w-full max-w-md p-6 glass-card">
-        <h1 class="text-3xl font-orbitron font-bold text-center mb-6 neon-pink">Bitcoin Time</h1>
+        <h1 class="text-3xl font-orbitron font-bold text-center mb-6 neon-pink cursor-pointer" @click="resetToCurrentTime">Bitcoin Time</h1>
 
         <div class="text-center font-mono font-semibold cursor-pointer hover:bg-gray-900 p-3 rounded-lg transition-all glow-border" @click="cycleDisplayMode">
-          <div class="text-xl neon-cyan">{{ formattedDate }}</div>
-          <div class="text-xl neon-pink pulse-text">{{ bitcoinTimeText }}</div>
-          <div v-if="displayBlockHeight !== null" class="text-lg neon-green">at block {{ displayBlockHeight.toLocaleString() }}</div>
+          <div class="text-lg neon-cyan">{{ formattedDate }}</div>
+          <div class="text-2xl neon-pink pulse-text font-bold">{{ bitcoinTimeText }}</div>
+          <div v-if="displayBlockHeight !== null" class="text-lg neon-green">
+            at block {{ displayBlockHeight === 0 ? '0' : displayBlockHeight.toLocaleString() }}
+          </div>
+          <div v-else-if="isBeforeGenesis" class="text-lg neon-green">no blocks yet</div>
           <div v-else class="text-lg neon-green">at block Unavailable</div>
           <div class="text-sm mt-1 neon-magenta">Since Bitcoin Genesis (Jan 3, 2009, 18:15:05 UTC)</div>
         </div>
@@ -16,10 +19,10 @@
         <div class="mt-6 input-group">
           <label class="block text-lg font-orbitron neon-pink mb-2">Select Date for Bitcoin Time</label>
           <div class="glass-card mb-4">
-            <UCalendar v-model="selectedDate" class="futuristic-calendar" @update:model-value="updateBitcoinTime" />
+            <UCalendar v-model="selectedDate" class="futuristic-calendar" aria-label="Select date for Bitcoin Time" @update:model-value="updateBitcoinTime" />
           </div>
           <div class="glass-card">
-            <div class="flex gap-4">
+            <div class="flex gap-4 justify-center">
               <div class="w-24">
                 <label class="block text-sm neon-pink mb-1">Hour</label>
                 <UInputNumber
@@ -51,6 +54,10 @@
         <div class="mt-6">
           <button class="neon-button" @click="shareToX">{{ shareButtonText }}</button>
         </div>
+
+        <div class="mt-4 text-center text-xs neon-magenta">
+          Powered by <a href="https://www.whatsonchain.com" target="_blank" rel="noopener noreferrer" class="underline hover:text-neon-pink">Whatsonchain API</a>
+        </div>
       </div>
     </div>
   </ClientOnly>
@@ -60,7 +67,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { CalendarDate, today, getLocalTimeZone } from '@internationalized/date'
 
-// Genesis block timestamp (January 3, 2009, 18:15:05 UTC)
+// Genesis block timestamp (Januar avy 3, 2009, 18:15:05 UTC)
 const genesisTimestamp = 1231006505 // Unix timestamp in seconds
 const displayModes = ['breakdown', 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds']
 const currentModeIndex = ref(0)
@@ -113,7 +120,7 @@ async function fetchCurrentBlockHeight(retryCount = 0) {
 
 // Estimate and fetch block height for a given timestamp
 async function getBlockHeightForTimestamp(targetTimestamp) {
-  if (!targetTimestamp || targetTimestamp < genesisTimestamp) return null
+  if (!targetTimestamp || targetTimestamp < genesisTimestamp) return 0 // Return 0 for pre-Genesis
 
   // Step 1: Approximate using 10-minute block interval (600 seconds)
   const secondsFromGenesis = targetTimestamp - genesisTimestamp
@@ -185,27 +192,24 @@ const bitcoinTime = computed(() => {
   return { years, months, weeks, days, hours, minutes, seconds, decimalYears, isNegative: diffSeconds < 0, isBeforeGenesis, jsDate }
 })
 
-// Formatted date for display
+// Formatted date for display (shorter format)
 const formattedDate = computed(() => {
   const { jsDate } = bitcoinTime.value
   return jsDate.toLocaleString('en-US', {
-    weekday: 'long',
-    month: 'long',
+    weekday: 'short',
+    month: 'short',
     day: 'numeric',
     year: 'numeric',
     hour: 'numeric',
     minute: '2-digit',
     hour12: true,
-  })
+  }).replace(/(\d+),/, '$1') // Remove comma after day
 })
 
-// Block height for display
+// Block height for display with pre-Genesis handling
 const displayBlockHeight = computed(() => {
-  console.log('Computing displayBlockHeight:', {
-    selectedDate: !!selectedDate.value,
-    selectedBlockHeight: selectedBlockHeight.value,
-    currentBlockHeight: currentBlockHeight.value,
-  })
+  const { isBeforeGenesis } = bitcoinTime.value
+  if (isBeforeGenesis) return 0
   return selectedDate.value && selectedBlockHeight.value !== null ? selectedBlockHeight.value : currentBlockHeight.value
 })
 
@@ -258,11 +262,17 @@ async function updateBitcoinTime() {
   jsDate.setHours(selectedHour.value || 0, selectedMinute.value || 0, 0)
   currentTime.value = jsDate.getTime() // Update to selected date
   const targetTimestamp = Math.floor(jsDate.getTime() / 1000)
-  if (targetTimestamp < genesisTimestamp) {
-    selectedBlockHeight.value = null
-    return
-  }
   selectedBlockHeight.value = await getBlockHeightForTimestamp(targetTimestamp)
+}
+
+// Reset to current time when clicking the title
+function resetToCurrentTime() {
+  selectedDate.value = null
+  selectedHour.value = new Date().getHours()
+  selectedMinute.value = new Date().getMinutes()
+  currentTime.value = Date.now()
+  selectedBlockHeight.value = null
+  fetchCurrentBlockHeight()
 }
 
 // Share to X
@@ -271,21 +281,21 @@ function shareToX() {
   let text
   if (isBeforeGenesis) {
     const dateText = jsDate.toLocaleString('en-US', {
-      month: 'long',
+      month: 'short',
       day: 'numeric',
       year: 'numeric',
     })
-    text = `on ${dateText} it was Year ${decimalYears} before Bitcoin, no blocks exist #bitcointime www.bitcointime.date`
+    text = `On ${dateText}, it was Year ${decimalYears} before Bitcoin, no blocks yet #bitcointime www.bitcointime.date`
   } else {
-    const timeText = isNegative ? `Year ${decimalYears} before Bitcoin` : `Year ${decimalYears} in bitcoin time`
+    const timeText = isNegative ? `Year ${decimalYears} before Bitcoin` : `Year ${decimalYears} in Bitcoin time`
     const block = displayBlockHeight.value !== null && displayBlockHeight.value !== undefined ? displayBlockHeight.value.toLocaleString() : 'N/A'
     if (selectedDate.value) {
       const dateText = jsDate.toLocaleString('en-US', {
-        month: 'long',
+        month: 'short',
         day: 'numeric',
         year: 'numeric',
       })
-      text = `on ${dateText} it was ${timeText} and the block was ${block} #bitcointime www.bitcointime.date`
+      text = `On ${dateText}, it was ${timeText} at block ${block} #bitcointime www.bitcointime.date`
     } else {
       text = `It is currently ${timeText} at block ${block} #bitcointime www.bitcointime.date`
     }
