@@ -1,23 +1,27 @@
+<!-- src/App.vue -->
 <template>
   <ClientOnly>
     <div class="min-h-screen flex items-center justify-center futuristic-bg">
       <div class="w-full max-w-md p-6 glass-card">
-        <h1 class="text-3xl font-orbitron font-bold text-center mb-6 neon-cyan">Bitcoin Time</h1>
+        <h1 class="text-3xl font-orbitron font-bold text-center mb-6 neon-pink">Bitcoin Time</h1>
 
-        <div class="text-center text-xl font-mono font-semibold neon-green cursor-pointer hover:bg-gray-800 p-3 rounded-lg transition-all glow-border" @click="cycleDisplayMode">
-          <span>{{ formattedDate }} is <span class="pulse-text">{{ displayText }}</span></span>
-          <span class="text-sm block mt-1 neon-magenta">Since Bitcoin Genesis (Jan 3, 2009, 18:15:05 UTC)</span>
+        <div class="text-center font-mono font-semibold cursor-pointer hover:bg-gray-900 p-3 rounded-lg transition-all glow-border" @click="cycleDisplayMode">
+          <div class="text-xl neon-cyan">{{ formattedDate }}</div>
+          <div class="text-xl neon-pink pulse-text">{{ bitcoinTimeText }}</div>
+          <div v-if="displayBlockHeight !== null" class="text-lg neon-green">at block {{ displayBlockHeight.toLocaleString() }}</div>
+          <div v-else class="text-lg neon-green">at block Unavailable</div>
+          <div class="text-sm mt-1 neon-magenta">Since Bitcoin Genesis (Jan 3, 2009, 18:15:05 UTC)</div>
         </div>
 
         <div class="mt-6 input-group">
-          <label class="block text-lg font-orbitron neon-cyan mb-2">Select Date for Bitcoin Time</label>
+          <label class="block text-lg font-orbitron neon-pink mb-2">Select Date for Bitcoin Time</label>
           <div class="glass-card mb-4">
             <UCalendar v-model="selectedDate" class="futuristic-calendar" @update:model-value="updateBitcoinTime" />
           </div>
           <div class="glass-card">
             <div class="flex gap-4">
               <div class="w-24">
-                <label class="block text-sm neon-cyan mb-1">Hour</label>
+                <label class="block text-sm neon-pink mb-1">Hour</label>
                 <UInputNumber
                   v-model="selectedHour"
                   :min="0"
@@ -29,7 +33,7 @@
                 />
               </div>
               <div class="w-24">
-                <label class="block text-sm neon-cyan mb-1">Minute</label>
+                <label class="block text-sm neon-pink mb-1">Minute</label>
                 <UInputNumber
                   v-model="selectedMinute"
                   :min="0"
@@ -101,8 +105,8 @@ async function fetchCurrentBlockHeight(retryCount = 0) {
     if (retryCount < 5) {
       setTimeout(() => fetchCurrentBlockHeight(retryCount + 1), 2000)
     } else {
-      currentBlockHeight.value = 914445 // Fallback
-      console.warn('Using fallback block height: 914445')
+      currentBlockHeight.value = null // No fallback block height
+      console.warn('Failed to fetch block height after retries')
     }
   }
 }
@@ -205,8 +209,8 @@ const displayBlockHeight = computed(() => {
   return selectedDate.value && selectedBlockHeight.value !== null ? selectedBlockHeight.value : currentBlockHeight.value
 })
 
-// Display text for Bitcoin time
-const displayText = computed(() => {
+// Bitcoin Time Text (excludes block height)
+const bitcoinTimeText = computed(() => {
   const { years, months, weeks, days, hours, minutes, seconds, decimalYears, isNegative, isBeforeGenesis } = bitcoinTime.value
   const mode = displayModes[currentModeIndex.value]
   const prefix = isNegative ? '-' : ''
@@ -234,12 +238,7 @@ const displayText = computed(() => {
   } else {
     timeStr = `${prefix}${seconds} seconds`
   }
-  const blockHeight = displayBlockHeight.value
-  console.log('Computing displayText, blockHeight:', blockHeight)
-  const block = isBeforeGenesis ? ', no blocks exist' : (blockHeight !== null && blockHeight !== undefined ? ` at block ${blockHeight.toLocaleString()}` : ' at block Fetching...')
-  const finalText = `${timeStr}${block}`
-  console.log('Final displayText:', finalText)
-  return finalText
+  return timeStr
 })
 
 // Cycle display modes
@@ -310,111 +309,7 @@ const shareButtonText = computed(() => {
 </script>
 
 <style scoped>
-/* CSS Variables for Colors */
-:root {
-  --neon-green: #00d4b1;
-  --neon-cyan: #00f7ff;
-  --neon-magenta: #ff00ff;
-}
-
-/* Futuristic background with subtle particles */
-.futuristic-bg {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
-  position: relative;
-  overflow: hidden;
-}
-.futuristic-bg::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="2" cy="2" r="1" fill="rgba(0, 215, 177, 0.2)"/></svg>') repeat;
-  animation: particleFloat 20s linear infinite;
-}
-
-/* Glassmorphism card */
-.glass-card {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 215, 177, 0.2);
-  box-shadow: 0 0 20px rgba(0, 215, 177, 0.1);
-  border-radius: 0.5rem;
-}
-
-/* Neon colors */
-.neon-green { color: var(--neon-green); }
-.neon-cyan { color: var(--neon-cyan); }
-.neon-magenta { color: var(--neon-magenta); }
-
-/* Glow border */
-.glow-border {
-  border: 1px solid transparent;
-  transition: border 0.3s ease, box-shadow 0.3s ease;
-}
-.glow-border:hover {
-  border: 1px solid var(--neon-green);
-  box-shadow: 0 0 10px var(--neon-green);
-}
-
-/* Pulse animation for text */
-.pulse-text {
-  animation: pulse 2s ease-in-out infinite;
-}
-
-/* Neon button */
-.neon-button {
-  background: transparent;
-  border: 1px solid var(--neon-green);
-  color: var(--neon-green);
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-.neon-button:hover {
-  background: rgba(0, 215, 177, 0.2);
-  transform: scale(1.05);
-}
-
-/* Futuristic calendar */
-.futuristic-calendar {
-  background: rgba(31, 41, 55, 0.5);
-  border: 1px solid rgba(0, 215, 177, 0.2);
-  border-radius: 0.25rem;
-}
-.futuristic-calendar .v-calendar {
-  color: var(--neon-green);
-}
-.futuristic-calendar .v-calendar__day:hover {
-  background: rgba(0, 215, 177, 0.2);
-}
-
-/* Futuristic input */
-.futuristic-input {
-  background: rgba(31, 41, 55, 0.5);
-  border: 1px solid rgba(0, 215, 177, 0.2);
-  color: var(--neon-green);
-  padding: 0.5rem;
-  border-radius: 0.25rem;
-  width: 100%;
-}
-.futuristic-input::placeholder {
-  color: var(--neon-magenta);
-}
-
-/* Animations */
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
-}
-@keyframes particleFloat {
-  0% { background-position: 0 0; }
-  100% { background-position: 100px 100px; }
-}
-
-/* Font */
+/* Minimal scoped styles; most styles are in main.css */
 .font-orbitron {
   font-family: 'Orbitron', sans-serif;
 }

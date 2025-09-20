@@ -13,7 +13,7 @@
 
 body {
   font-family: 'Orbitron', 'Arial', sans-serif;
-  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  background: #000; /* Pure black for 80s vibe */
   color: #fff;
   line-height: 1.5;
   overflow-x: hidden;
@@ -21,12 +21,13 @@ body {
 
 /* CSS Variables */
 :root {
-  --neon-green: #00d4b1;
-  --neon-cyan: #00f7ff;
-  --neon-magenta: #ff00ff;
+  --neon-pink: #ff0080; /* Hot neon pink */
+  --neon-cyan: #00e6ff; /* Bright cyan for contrast */
+  --neon-magenta: #e600e6; /* Vibrant magenta */
+  --neon-green: #00ff00; /* Retro green for block height */
   --glass-bg: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(0, 215, 177, 0.2);
-  --shadow-glow: 0 0 20px rgba(0, 215, 177, 0.1);
+  --glass-border: rgba(255, 0, 128, 0.3); /* Pink-tinted border */
+  --shadow-glow: 0 0 20px rgba(255, 0, 128, 0.2);
 }
 
 /* Futuristic Background */
@@ -37,24 +38,25 @@ body {
   justify-content: center;
   position: relative;
   overflow: hidden;
+  background: #000;
 }
 
 .futuristic-bg::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="2" cy="2" r="1" fill="rgba(0, 215, 177, 0.2)"/></svg>') repeat;
-  animation: particleFloat 20s linear infinite;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="2" cy="2" r="1" fill="rgba(255, 0, 128, 0.2)"/></svg>') repeat;
+  animation: particleFloat 15s linear infinite;
   z-index: 1;
 }
 
 /* Glassmorphism Card */
 .glass-card {
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
+  background: linear-gradient(145deg, rgba(255, 0, 128, 0.05), rgba(0, 0, 0, 0.3));
+  backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
   box-shadow: var(--shadow-glow);
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   padding: 1.5rem;
   position: relative;
   z-index: 2;
@@ -63,9 +65,25 @@ body {
 }
 
 /* Neon Colors */
-.neon-green { color: var(--neon-green); }
-.neon-cyan { color: var(--neon-cyan); }
-.neon-magenta { color: var(--neon-magenta); }
+.neon-pink {
+  color: var(--neon-pink);
+  text-shadow: 0 0 5px var(--neon-pink);
+}
+
+.neon-cyan {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 5px var(--neon-cyan);
+}
+
+.neon-magenta {
+  color: var(--neon-magenta);
+  text-shadow: 0 0 5px var(--neon-magenta);
+}
+
+.neon-green {
+  color: var(--neon-green);
+  text-shadow: 0 0 5px var(--neon-green);
+}
 
 /* Glow Border */
 .glow-border {
@@ -74,62 +92,77 @@ body {
 }
 
 .glow-border:hover {
-  border: 1px solid var(--neon-green);
-  box-shadow: 0 0 10px var(--neon-green);
+  border: 1px solid var(--neon-pink);
+  box-shadow: 0 0 15px var(--neon-pink);
 }
 
 /* Pulse Animation */
 .pulse-text {
-  animation: pulse 2s ease-in-out infinite;
+  animation: pulse 1.5s ease-in-out infinite;
 }
 
 /* Neon Button */
 .neon-button {
   background: transparent;
-  border: 1px solid var(--neon-green);
-  color: var(--neon-green);
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
+  border: 2px solid var(--neon-pink);
+  color: var(--neon-pink);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
   font-family: 'Orbitron', sans-serif;
-  font-size: 1rem;
+  font-size: 1.1rem;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 5px var(--neon-pink);
 }
 
 .neon-button:hover {
-  background: rgba(0, 215, 177, 0.2);
+  background: rgba(255, 0, 128, 0.2);
   transform: scale(1.05);
-  box-shadow: 0 0 12px var(--neon-green);
+  box-shadow: 0 0 15px var(--neon-pink);
+  animation: neonFlicker 0.4s ease-in-out;
+}
+
+.neon-button:focus {
+  outline: none;
+  box-shadow: 0 0 8px var(--neon-pink);
 }
 
 /* Futuristic Calendar */
 .futuristic-calendar {
-  background: rgba(31, 41, 55, 0.5);
+  background: rgba(0, 0, 0, 0.5);
   border: 1px solid var(--glass-border);
-  border-radius: 0.25rem;
+  border-radius: 0.5rem;
 }
 
 .futuristic-calendar .v-calendar {
-  color: var(--neon-green);
+  color: var(--neon-pink);
 }
 
-.futuristic-calendar .v-calendar__day:hover {
-  background: rgba(0, 215, 177, 0.2);
+.futuristic-calendar .v-calendar__day:hover,
+.futuristic-calendar .v-calendar__day--selected {
+  background: rgba(255, 0, 128, 0.2);
+  border: 1px solid var(--neon-pink);
+  box-shadow: 0 0 8px var(--neon-pink);
 }
 
 /* Futuristic Input */
 .futuristic-input {
-  background: rgba(31, 41, 55, 0.5);
+  background: rgba(0, 0, 0, 0.5);
   border: 1px solid var(--glass-border);
-  color: var(--neon-green);
-  padding: 0.5rem;
-  border-radius: 0.25rem;
+  color: var(--neon-pink);
+  padding: 0.75rem;
+  border-radius: 0.5rem;
   width: 100%;
   font-family: 'Orbitron', sans-serif;
 }
 
 .futuristic-input::placeholder {
   color: var(--neon-magenta);
+}
+
+.futuristic-input:focus {
+  outline: none;
+  box-shadow: 0 0 8px var(--neon-pink);
 }
 
 /* Input Group */
@@ -150,11 +183,19 @@ h1 {
   font-weight: 700;
   text-align: center;
   margin-bottom: 1.5rem;
+  text-shadow: 0 0 10px var(--neon-pink);
 }
 
 .text-xl {
   font-size: 1.25rem;
   font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
 }
 
 .text-sm {
@@ -163,13 +204,32 @@ h1 {
 
 /* Animations */
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+  0%, 100% {
+    opacity: 1;
+    text-shadow: 0 0 5px var(--neon-pink);
+  }
+  50% {
+    opacity: 0.7;
+    text-shadow: 0 0 3px var(--neon-pink);
+  }
 }
 
 @keyframes particleFloat {
-  0% { background-position: 0 0; }
-  100% { background-position: 100px 100px; }
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(-100px, -100px);
+  }
+}
+
+@keyframes neonFlicker {
+  0%, 100% {
+    box-shadow: 0 0 15px var(--neon-pink);
+  }
+  50% {
+    box-shadow: 0 0 10px var(--neon-pink);
+  }
 }
 
 /* Responsive Design */
@@ -182,12 +242,20 @@ h1 {
     font-size: 1.5rem;
   }
 
+  .text-xl {
+    font-size: 1.1rem;
+  }
+
+  .text-lg {
+    font-size: 1rem;
+  }
+
   .input-group {
     gap: 0.75rem;
   }
 
   .neon-button {
-    padding: 0.5rem;
-    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
   }
 }
