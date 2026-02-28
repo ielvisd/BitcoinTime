@@ -13,11 +13,11 @@
           <!-- Date & Time row -->
           <div class="datetime-row">
             <span class="date-label clickable" @click="showCalendar = !showCalendar">
-              {{ formattedDate.split(',').slice(0, -1).join(',') }} <span class="edit-hint">▾</span>
+              {{ formattedDate.split(',').slice(0, -1).join(',') }}
             </span>
             <span class="datetime-sep">·</span>
             <span class="date-label clickable" @click="showTimePicker = !showTimePicker">
-              {{ formattedTime }} <span class="edit-hint">▾</span>
+              {{ formattedTime }}
             </span>
           </div>
 
