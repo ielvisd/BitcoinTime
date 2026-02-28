@@ -1,6 +1,6 @@
 <template>
   <div v-if="currentBlockHeight !== null" class="text-center mt-3 p-2 rounded-lg glow-border">
-    <div class="text-xs neon-magenta uppercase tracking-wider mb-1">Next Halving</div>
+    <div class="text-xs neon-magenta uppercase tracking-wider mb-1">Next BSV Halving</div>
     <div class="text-sm neon-cyan font-mono">
       <span class="neon-green font-bold">{{ blocksRemaining.toLocaleString() }}</span> blocks remaining
     </div>
