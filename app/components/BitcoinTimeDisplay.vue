@@ -1,16 +1,18 @@
 <template>
   <div
-    class="text-center font-mono font-semibold cursor-pointer hover:bg-gray-900 p-3 rounded-lg transition-all glow-border"
+    class="text-center cursor-pointer p-4 rounded-xl transition-all glow-border"
     @click="$emit('cycle')"
   >
-    <div class="text-lg neon-cyan">{{ formattedDate }}</div>
-    <div class="text-2xl neon-pink pulse-text font-bold">{{ bitcoinTimeText }}</div>
-    <div v-if="displayBlockHeight !== null" class="text-lg neon-green">
-      at block {{ displayBlockHeight === 0 ? '0' : displayBlockHeight.toLocaleString() }}
+    <div class="text-sm tracking-widest uppercase" style="color: var(--text-secondary);">{{ formattedDate }}</div>
+    <div class="text-xl sm:text-2xl font-orbitron font-bold mt-3 mb-2 pulse-text" style="color: var(--accent); text-shadow: 0 0 30px var(--accent-glow);">
+      {{ bitcoinTimeText }}
     </div>
-    <div v-else-if="isBeforeGenesis" class="text-lg neon-green">no blocks yet</div>
-    <div v-else class="text-lg neon-green">at block Unavailable</div>
-    <div class="text-sm mt-1 neon-magenta">Since Bitcoin Genesis (Jan 3, 2009, 18:15:05 UTC)</div>
+    <div v-if="displayBlockHeight !== null" class="text-base font-mono" style="color: var(--text-secondary);">
+      block <span style="color: var(--text-primary);">{{ displayBlockHeight === 0 ? '0' : displayBlockHeight.toLocaleString() }}</span>
+    </div>
+    <div v-else-if="isBeforeGenesis" class="text-base font-mono" style="color: var(--text-secondary);">no blocks yet</div>
+    <div v-else class="text-base font-mono" style="color: var(--text-secondary);">block unavailable</div>
+    <div class="text-xs mt-3" style="color: var(--text-tertiary);">Since Genesis · Jan 3, 2009 · 18:15:05 UTC</div>
   </div>
 </template>
 

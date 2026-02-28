@@ -1,11 +1,12 @@
 <template>
-  <div v-if="currentBlockHeight !== null" class="text-center mt-3 p-2 rounded-lg glow-border">
-    <div class="text-xs neon-magenta uppercase tracking-wider mb-1">Next BSV Halving</div>
-    <div class="text-sm neon-cyan font-mono">
-      <span class="neon-green font-bold">{{ blocksRemaining.toLocaleString() }}</span> blocks remaining
+  <div v-if="currentBlockHeight !== null" class="text-center mt-4 py-3 px-4 rounded-xl glow-border">
+    <div class="text-xs uppercase tracking-[0.2em]" style="color: var(--text-tertiary);">Next BSV Halving</div>
+    <div class="text-lg font-orbitron font-semibold mt-1" style="color: var(--accent);">
+      {{ blocksRemaining.toLocaleString() }}
+      <span class="text-sm font-normal" style="color: var(--text-secondary);">blocks</span>
     </div>
-    <div class="text-xs neon-magenta mt-1">
-      ~{{ estimatedDate }} (Block {{ NEXT_HALVING_HEIGHT.toLocaleString() }})
+    <div class="text-xs mt-1" style="color: var(--text-tertiary);">
+      ~{{ estimatedDate }} · Block {{ NEXT_HALVING_HEIGHT.toLocaleString() }}
     </div>
   </div>
 </template>
@@ -14,7 +15,7 @@
 import { computed } from 'vue'
 
 const NEXT_HALVING_HEIGHT = 1_050_000
-const AVG_BLOCK_TIME_SECONDS = 600 // 10 minutes
+const AVG_BLOCK_TIME_SECONDS = 600
 
 const props = defineProps<{
   currentBlockHeight: number | null
@@ -29,9 +30,6 @@ const estimatedDate = computed(() => {
   if (props.currentBlockHeight === null) return '...'
   const secondsRemaining = blocksRemaining.value * AVG_BLOCK_TIME_SECONDS
   const estimatedMs = Date.now() + secondsRemaining * 1000
-  return new Date(estimatedMs).toLocaleDateString('en-US', {
-    month: 'short',
-    year: 'numeric',
-  })
+  return new Date(estimatedMs).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
 })
 </script>

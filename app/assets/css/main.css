@@ -2,293 +2,211 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 
-/* main.css */
-
-/* Reset and Base Styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* ── Design System ── */
+:root {
+  --accent: #c8a2ff;          /* soft violet */
+  --accent-glow: rgba(200, 162, 255, 0.3);
+  --text-primary: #f0eef5;
+  --text-secondary: rgba(240, 238, 245, 0.5);
+  --text-tertiary: rgba(240, 238, 245, 0.3);
+  --surface: rgba(255, 255, 255, 0.03);
+  --surface-border: rgba(255, 255, 255, 0.06);
+  --bg: #0a0a0f;
 }
+
+/* ── Reset ── */
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: 'Orbitron', 'Arial', sans-serif;
-  background: #000; /* Pure black for 80s vibe */
-  color: #fff;
-  line-height: 1.5;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text-primary);
+  line-height: 1.6;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* CSS Variables */
-:root {
-  --neon-pink: #ff0080; /* Hot neon pink */
-  --neon-cyan: #00e6ff; /* Bright cyan for contrast */
-  --neon-magenta: #e600e6; /* Vibrant magenta */
-  --neon-green: #00ff00; /* Retro green for block height */
-  --glass-bg: rgba(255, 255, 255, 0.05);
-  --glass-border: rgba(255, 0, 128, 0.3); /* Pink-tinted border */
-  --shadow-glow: 0 0 20px rgba(255, 0, 128, 0.2);
-}
-
-/* Futuristic Background */
+/* ── Background ── */
 .futuristic-bg {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow: hidden;
-  background: #000;
+  background: var(--bg);
 }
 
 .futuristic-bg::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><circle cx="2" cy="2" r="1" fill="rgba(255, 0, 128, 0.2)"/></svg>') repeat;
-  animation: particleFloat 15s linear infinite;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(200, 162, 255, 0.04) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgba(200, 162, 255, 0.02) 0%, transparent 50%);
   z-index: 1;
 }
 
-/* Glassmorphism Card */
+/* ── Card ── */
 .glass-card {
-  background: linear-gradient(145deg, rgba(255, 0, 128, 0.05), rgba(0, 0, 0, 0.3));
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--shadow-glow);
-  border-radius: 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 1rem;
   padding: 1.5rem;
   position: relative;
   z-index: 2;
   max-width: 28rem;
   width: 100%;
+  backdrop-filter: blur(20px);
 }
 
-/* Neon Colors */
+/* ── Typography ── */
+.font-orbitron {
+  font-family: 'Orbitron', sans-serif;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.05em;
+}
+
+/* ── Accent Colors (single palette) ── */
 .neon-pink {
-  color: var(--neon-pink);
-  text-shadow: 0 0 5px var(--neon-pink);
+  color: var(--accent);
 }
 
 .neon-cyan {
-  color: var(--neon-cyan);
-  text-shadow: 0 0 5px var(--neon-cyan);
+  color: var(--text-primary);
 }
 
 .neon-magenta {
-  color: var(--neon-magenta);
-  text-shadow: 0 0 5px var(--neon-magenta);
+  color: var(--text-secondary);
 }
 
 .neon-green {
-  color: var(--neon-green);
-  text-shadow: 0 0 5px var(--neon-green);
+  color: var(--accent);
+  text-shadow: 0 0 20px var(--accent-glow);
 }
 
-/* Glow Border */
+/* ── Glow Border ── */
 .glow-border {
-  border: 1px solid transparent;
+  border: 1px solid var(--surface-border);
   transition: border 0.3s ease, box-shadow 0.3s ease;
 }
 
 .glow-border:hover {
-  border: 1px solid var(--neon-pink);
-  box-shadow: 0 0 15px var(--neon-pink);
+  border: 1px solid rgba(200, 162, 255, 0.15);
+  box-shadow: 0 0 30px rgba(200, 162, 255, 0.05);
 }
 
-/* Pulse Animation */
+/* ── Pulse ── */
 .pulse-text {
-  animation: pulse 1.5s ease-in-out infinite;
+  animation: pulse 3s ease-in-out infinite;
 }
 
-/* Neon Button */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+/* ── Button ── */
 .neon-button {
   background: transparent;
-  border: 2px solid var(--neon-pink);
-  color: var(--neon-pink);
-  padding: 0.75rem 1.5rem;
+  border: 1px solid rgba(200, 162, 255, 0.3);
+  color: var(--accent);
+  padding: 0.6rem 1.5rem;
   border-radius: 0.5rem;
-  font-family: 'Orbitron', sans-serif;
-  font-size: 1.1rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
-  text-shadow: 0 0 5px var(--neon-pink);
+  letter-spacing: 0.02em;
 }
 
 .neon-button:hover {
-  background: rgba(255, 0, 128, 0.2);
-  transform: scale(1.05);
-  box-shadow: 0 0 15px var(--neon-pink);
-  animation: neonFlicker 0.4s ease-in-out;
+  background: rgba(200, 162, 255, 0.08);
+  border-color: rgba(200, 162, 255, 0.5);
+  box-shadow: 0 0 20px rgba(200, 162, 255, 0.1);
 }
 
 .neon-button:focus {
   outline: none;
-  box-shadow: 0 0 8px var(--neon-pink);
+  box-shadow: 0 0 0 2px rgba(200, 162, 255, 0.2);
 }
 
-/* Futuristic Calendar */
+/* ── Calendar ── */
 .futuristic-calendar {
-  background: rgba(0, 0, 0, 0.5);
-  border: 1px solid var(--glass-border);
+  background: transparent;
+  border: none;
   border-radius: 0.5rem;
 }
 
-.futuristic-calendar .v-calendar {
-  color: var(--neon-pink);
+/* ── Time Input ── */
+.neon-time-input {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--surface-border);
+  color: var(--text-primary);
+  font-family: 'Orbitron', monospace;
+  font-size: 1.1rem;
+  font-weight: 500;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  color-scheme: dark;
 }
 
-.futuristic-calendar .v-calendar__day:hover,
-.futuristic-calendar .v-calendar__day--selected {
-  background: rgba(255, 0, 128, 0.2);
-  border: 1px solid var(--neon-pink);
-  box-shadow: 0 0 8px var(--neon-pink);
+.neon-time-input::-webkit-calendar-picker-indicator {
+  filter: invert(0.7);
+  cursor: pointer;
+  opacity: 0.5;
 }
 
-/* Futuristic Input */
+.neon-time-input:focus {
+  outline: none;
+  border-color: rgba(200, 162, 255, 0.3);
+  box-shadow: 0 0 20px rgba(200, 162, 255, 0.08);
+}
+
+/* ── General Input ── */
 .futuristic-input {
-  background: rgba(0, 0, 0, 0.5);
-  border: 1px solid var(--glass-border);
-  color: var(--neon-pink);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--surface-border);
+  color: var(--text-primary);
   padding: 0.75rem;
   border-radius: 0.5rem;
   width: 100%;
-  font-family: 'Orbitron', sans-serif;
-}
-
-.futuristic-input::placeholder {
-  color: var(--neon-magenta);
+  font-family: 'Inter', sans-serif;
 }
 
 .futuristic-input:focus {
   outline: none;
-  box-shadow: 0 0 8px var(--neon-pink);
+  border-color: rgba(200, 162, 255, 0.3);
 }
 
-/* Input Group */
+/* ── Input Group ── */
 .input-group {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.input-group label {
-  font-size: 1.125rem;
-  font-weight: 500;
-}
-
-/* Typography */
-h1 {
-  font-size: 1.875rem;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 1.5rem;
-  text-shadow: 0 0 10px var(--neon-pink);
-}
-
-.text-xl {
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.text-lg {
-  font-size: 1.125rem;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-}
-
-.text-sm {
-  font-size: 0.875rem;
-}
-
-/* Animations */
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-    text-shadow: 0 0 5px var(--neon-pink);
-  }
-  50% {
-    opacity: 0.7;
-    text-shadow: 0 0 3px var(--neon-pink);
-  }
-}
-
-@keyframes particleFloat {
-  0% {
-    transform: translate(0, 0);
-  }
-  100% {
-    transform: translate(-100px, -100px);
-  }
-}
-
-@keyframes neonFlicker {
-  0%, 100% {
-    box-shadow: 0 0 15px var(--neon-pink);
-  }
-  50% {
-    box-shadow: 0 0 10px var(--neon-pink);
-  }
-}
-
-/* Font Utility */
-.font-orbitron {
-  font-family: 'Orbitron', sans-serif;
-}
-
-/* Neon Time Input */
-.neon-time-input {
-  background: rgba(0, 0, 0, 0.7);
-  border: 2px solid var(--neon-pink);
-  color: var(--neon-cyan);
-  font-family: 'Orbitron', monospace;
-  font-size: 1.25rem;
-  font-weight: 700;
-  text-align: center;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  text-shadow: 0 0 8px var(--neon-cyan);
-  box-shadow: 0 0 10px rgba(255, 0, 128, 0.15), inset 0 0 10px rgba(0, 0, 0, 0.5);
-  transition: all 0.3s ease;
-  color-scheme: dark;
-}
-
-.neon-time-input::-webkit-calendar-picker-indicator {
-  filter: invert(1) hue-rotate(180deg);
-  cursor: pointer;
-}
-
-.neon-time-input:focus {
-  outline: none;
-  border-color: var(--neon-cyan);
-  box-shadow: 0 0 15px var(--neon-cyan), inset 0 0 10px rgba(0, 0, 0, 0.5);
-}
-
-/* Responsive Design */
+/* ── Responsive ── */
 @media (max-width: 640px) {
   .glass-card {
     padding: 1rem;
+    border-radius: 0.75rem;
   }
 
   h1 {
     font-size: 1.5rem;
   }
 
-  .text-xl {
-    font-size: 1.1rem;
-  }
-
-  .text-lg {
-    font-size: 1rem;
-  }
-
-  .input-group {
-    gap: 0.75rem;
-  }
-
   .neon-button {
     padding: 0.5rem 1rem;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
   }
 }
