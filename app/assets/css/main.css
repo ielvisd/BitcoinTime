@@ -243,23 +243,20 @@ h1 {
   border: 2px solid var(--neon-pink);
   color: var(--neon-cyan);
   font-family: 'Orbitron', monospace;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
   text-align: center;
-  width: 4.5rem;
-  padding: 0.5rem;
+  padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   text-shadow: 0 0 8px var(--neon-cyan);
   box-shadow: 0 0 10px rgba(255, 0, 128, 0.15), inset 0 0 10px rgba(0, 0, 0, 0.5);
-  -moz-appearance: textfield;
-  appearance: textfield;
   transition: all 0.3s ease;
+  color-scheme: dark;
 }
 
-.neon-time-input::-webkit-inner-spin-button,
-.neon-time-input::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+.neon-time-input::-webkit-calendar-picker-indicator {
+  filter: invert(1) hue-rotate(180deg);
+  cursor: pointer;
 }
 
 .neon-time-input:focus {

@@ -1,6 +1,6 @@
 <template>
   <div class="mt-6 input-group">
-    <label class="block text-lg font-orbitron neon-pink mb-2">Select Date for Bitcoin Time</label>
+    <label class="block text-lg font-orbitron neon-pink mb-2">Select Date &amp; Time</label>
     <div class="glass-card mb-4">
       <UCalendar
         :model-value="modelValue"
@@ -10,49 +10,46 @@
       />
     </div>
     <div class="glass-card">
-      <div class="flex gap-6 justify-center items-end">
-        <div class="text-center">
-          <label class="block text-sm neon-pink mb-2 font-orbitron">Hour</label>
-          <input
-            type="number"
-            :value="hour"
-            min="0"
-            max="23"
-            step="1"
-            class="neon-time-input"
-            @input="$emit('update:hour', Math.min(23, Math.max(0, Number(($event.target as HTMLInputElement).value))))"
-          />
-        </div>
-        <div class="text-2xl neon-pink font-bold pb-1">:</div>
-        <div class="text-center">
-          <label class="block text-sm neon-pink mb-2 font-orbitron">Minute</label>
-          <input
-            type="number"
-            :value="minute"
-            min="0"
-            max="59"
-            step="1"
-            class="neon-time-input"
-            @input="$emit('update:minute', Math.min(59, Math.max(0, Number(($event.target as HTMLInputElement).value))))"
-          />
-        </div>
+      <div class="flex justify-center items-center gap-3">
+        <span class="neon-pink font-orbitron text-sm">Time</span>
+        <input
+          type="time"
+          :value="timeValue"
+          class="neon-time-input"
+          @input="handleTimeInput"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import type { CalendarDate } from '@internationalized/date'
 
-defineProps<{
+const props = defineProps<{
   modelValue: CalendarDate | null
   hour: number
   minute: number
 }>()
 
-defineEmits<{
+const emit = defineEmits<{
   'update:modelValue': [value: CalendarDate | null]
   'update:hour': [value: number]
   'update:minute': [value: number]
 }>()
+
+const timeValue = computed(() => {
+  const h = String(props.hour).padStart(2, '0')
+  const m = String(props.minute).padStart(2, '0')
+  return `${h}:${m}`
+})
+
+function handleTimeInput(event: Event) {
+  const val = (event.target as HTMLInputElement).value
+  if (!val) return
+  const [h, m] = val.split(':').map(Number)
+  emit('update:hour', h)
+  emit('update:minute', m)
+}
 </script>
