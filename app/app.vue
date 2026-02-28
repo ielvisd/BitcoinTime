@@ -1,5 +1,6 @@
 <template>
   <ClientOnly>
+    <Analytics />
     <div class="min-h-screen flex items-center justify-center futuristic-bg">
       <div class="w-full max-w-md p-4 sm:p-6 glass-card">
         <h1
@@ -46,7 +47,7 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { inject } from '@vercel/analytics'
+import { Analytics } from '@vercel/analytics/vue'
 import { useBitcoinTime } from '~/composables/useBitcoinTime'
 import { useBlockHeight } from '~/composables/useBlockHeight'
 import { useBtcPrice } from '~/composables/useBtcPrice'
@@ -76,7 +77,6 @@ const { price, loading: priceLoading } = useBtcPrice()
 
 onMounted(() => {
   if (import.meta.client) {
-    inject()
     startLiveClock()
     fetchCurrentBlockHeight()
   }
