@@ -232,6 +232,11 @@ h1 {
   }
 }
 
+/* Font Utility */
+.font-orbitron {
+  font-family: 'Orbitron', sans-serif;
+}
+
 /* Responsive Design */
 @media (max-width: 640px) {
   .glass-card {

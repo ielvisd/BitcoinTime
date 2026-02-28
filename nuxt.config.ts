@@ -3,11 +3,87 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   css: ['@/assets/css/main.css'],
+
+  app: {
+    head: {
+      title: 'Bitcoin Time — Track Time Since Genesis',
+      htmlAttrs: { lang: 'en' },
+      link: [
+        {
+          rel: 'preconnect',
+          href: 'https://fonts.googleapis.com',
+        },
+        {
+          rel: 'preconnect',
+          href: 'https://fonts.gstatic.com',
+          crossorigin: '',
+        },
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap',
+        },
+      ],
+      meta: [
+        { name: 'description', content: 'Track time elapsed since the Bitcoin Genesis Block (January 3, 2009). View Bitcoin time in years, months, days, and more. Live block height from the BSV blockchain.' },
+        { name: 'theme-color', content: '#ff0080' },
+        { property: 'og:title', content: 'Bitcoin Time — Track Time Since Genesis' },
+        { property: 'og:description', content: 'Track time elapsed since the Bitcoin Genesis Block. Live block height, halving countdown, and BTC price ticker.' },
+        { property: 'og:url', content: 'https://bitcointime.date' },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:site_name', content: 'Bitcoin Time' },
+        { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:title', content: 'Bitcoin Time — Track Time Since Genesis' },
+        { name: 'twitter:description', content: 'Track time elapsed since the Bitcoin Genesis Block. Live block height, halving countdown, and BTC price ticker.' },
+      ],
+    },
+  },
+
   modules: [
     '@nuxt/eslint',
     '@nuxt/image',
     '@nuxt/scripts',
     '@nuxt/test-utils',
-    '@nuxt/ui'
-  ]
+    '@nuxt/ui',
+    '@vite-pwa/nuxt',
+  ],
+
+  pwa: {
+    registerType: 'autoUpdate',
+    manifest: {
+      name: 'Bitcoin Time',
+      short_name: 'BitcoinTime',
+      description: 'Track time elapsed since the Bitcoin Genesis Block',
+      theme_color: '#ff0080',
+      background_color: '#000000',
+      display: 'standalone',
+      icons: [
+        {
+          src: '/pwa-192x192.png',
+          sizes: '192x192',
+          type: 'image/png',
+        },
+        {
+          src: '/pwa-512x512.png',
+          sizes: '512x512',
+          type: 'image/png',
+        },
+        {
+          src: '/pwa-512x512.png',
+          sizes: '512x512',
+          type: 'image/png',
+          purpose: 'any maskable',
+        },
+      ],
+    },
+    workbox: {
+      navigateFallback: '/',
+      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+    },
+    client: {
+      installPrompt: true,
+    },
+    devOptions: {
+      enabled: false,
+    },
+  },
 })
