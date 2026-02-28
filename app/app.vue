@@ -1,6 +1,5 @@
 <template>
   <ClientOnly>
-    <Analytics />
     <div class="app-wrapper">
       <div class="app-container">
         <!-- Header -->
@@ -87,7 +86,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { Analytics } from '@vercel/analytics/nuxt'
+
 import { useBitcoinTime } from '~/composables/useBitcoinTime'
 import { useBlockHeight } from '~/composables/useBlockHeight'
 import { useBtcPrice } from '~/composables/useBtcPrice'
