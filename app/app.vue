@@ -46,6 +46,7 @@
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
+import { inject } from '@vercel/analytics'
 import { useBitcoinTime } from '~/composables/useBitcoinTime'
 import { useBlockHeight } from '~/composables/useBlockHeight'
 import { useBtcPrice } from '~/composables/useBtcPrice'
@@ -75,6 +76,7 @@ const { price, loading: priceLoading } = useBtcPrice()
 
 onMounted(() => {
   if (import.meta.client) {
+    inject()
     startLiveClock()
     fetchCurrentBlockHeight()
   }
