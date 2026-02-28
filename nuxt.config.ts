@@ -23,6 +23,14 @@ export default defineNuxtConfig({
           href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Orbitron:wght@400;500;600;700&display=swap',
         },
       ],
+      script: [
+        {
+          defer: true,
+          src: '/_vercel/insights/script.js',
+          'data-sdkn': '@vercel/analytics',
+          'data-sdkv': '1.6.1',
+        },
+      ],
       meta: [
         { name: 'description', content: 'Track time elapsed since the Bitcoin Genesis Block (January 3, 2009). View Bitcoin time in years, months, days, and more. Live block height from the BSV blockchain.' },
         { name: 'theme-color', content: '#0a0a0f' },
