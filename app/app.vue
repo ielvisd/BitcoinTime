@@ -9,9 +9,27 @@
         </header>
 
         <!-- Main Display -->
-        <section class="time-section" @click="cycleDisplayMode">
-          <p class="date-label">{{ formattedDate }}</p>
-          <p class="time-value">{{ bitcoinTimeText }}</p>
+        <section class="time-section">
+          <!-- Clickable date -->
+          <p class="date-label clickable" @click="showCalendar = !showCalendar">
+            {{ formattedDate.split(',').slice(0, -1).join(',') }}
+            <span class="edit-hint">▾</span>
+          </p>
+
+          <!-- Calendar popup -->
+          <div v-if="showCalendar" class="popup-overlay" @click.self="showCalendar = false">
+            <div class="popup-card">
+              <UCalendar
+                :model-value="selectedDate"
+                aria-label="Select date"
+                @update:model-value="onDateChange"
+              />
+              <button class="popup-close" @click="showCalendar = false">Done</button>
+            </div>
+          </div>
+
+          <p class="time-value" @click="cycleDisplayMode">{{ bitcoinTimeText }}</p>
+
           <p class="block-info">
             <template v-if="displayBlockHeight !== null">
               Block {{ displayBlockHeight === 0 ? '0' : displayBlockHeight.toLocaleString() }}
@@ -19,6 +37,26 @@
             <template v-else-if="bitcoinTime.isBeforeGenesis">No blocks yet</template>
             <template v-else>Block unavailable</template>
           </p>
+
+          <!-- Clickable time -->
+          <p class="time-label clickable" @click="showTimePicker = !showTimePicker">
+            {{ formattedTime }}
+            <span class="edit-hint">▾</span>
+          </p>
+
+          <!-- Time popup -->
+          <div v-if="showTimePicker" class="popup-overlay" @click.self="showTimePicker = false">
+            <div class="popup-card popup-card-sm">
+              <input
+                type="time"
+                :value="timeInputValue"
+                class="time-input"
+                @input="handleTimeInput"
+              />
+              <button class="popup-close" @click="showTimePicker = false">Done</button>
+            </div>
+          </div>
+
           <p class="genesis-note">Since Genesis · Jan 3, 2009</p>
         </section>
 
@@ -30,32 +68,6 @@
           </div>
           <p class="halving-meta">~Apr 2028 · Block 1,050,000</p>
         </section>
-
-        <!-- Divider -->
-        <div class="divider" />
-
-        <!-- Date & Time Picker -->
-        <section class="picker-section">
-          <p class="picker-label">Select Date & Time</p>
-          <div class="calendar-wrapper">
-            <UCalendar
-              :model-value="selectedDate"
-              aria-label="Select date for Bitcoin Time"
-              @update:model-value="onDateChange"
-            />
-          </div>
-          <div class="time-wrapper">
-            <input
-              type="time"
-              :value="timeValue"
-              class="time-input"
-              @input="handleTimeInput"
-            />
-          </div>
-        </section>
-
-        <!-- Divider -->
-        <div class="divider" />
 
         <!-- Footer -->
         <footer class="app-footer">
@@ -75,12 +87,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { Analytics } from '@vercel/analytics/vue'
 import { useBitcoinTime } from '~/composables/useBitcoinTime'
 import { useBlockHeight } from '~/composables/useBlockHeight'
 import { useBtcPrice } from '~/composables/useBtcPrice'
 import type { CalendarDate } from '@internationalized/date'
+
+const showCalendar = ref(false)
+const showTimePicker = ref(false)
 
 const {
   currentTime,
@@ -104,10 +119,16 @@ const {
 
 const { price, loading: priceLoading } = useBtcPrice()
 
-const timeValue = computed(() => {
-  const h = String(selectedHour.value).padStart(2, '0')
-  const m = String(selectedMinute.value).padStart(2, '0')
-  return `${h}:${m}`
+const formattedTime = computed(() => {
+  const h = selectedHour.value
+  const m = selectedMinute.value
+  const period = h >= 12 ? 'PM' : 'AM'
+  const h12 = h % 12 || 12
+  return `${h12}:${String(m).padStart(2, '0')} ${period}`
+})
+
+const timeInputValue = computed(() => {
+  return `${String(selectedHour.value).padStart(2, '0')}:${String(selectedMinute.value).padStart(2, '0')}`
 })
 
 onMounted(() => {
@@ -120,12 +141,15 @@ onMounted(() => {
 function handleReset(): void {
   resetToCurrentTime()
   fetchCurrentBlockHeight()
+  showCalendar.value = false
+  showTimePicker.value = false
 }
 
 async function onDateChange(value: CalendarDate | null): Promise<void> {
   selectedDate.value = value
   if (!value) currentTime.value = Date.now()
   await updateBlockHeightForDate(value, selectedHour.value, selectedMinute.value)
+  showCalendar.value = false
 }
 
 function handleTimeInput(event: Event): void {
@@ -157,7 +181,7 @@ function handleTimeInput(event: Event): void {
 /* Header */
 .app-header {
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .title {
@@ -172,17 +196,12 @@ function handleTimeInput(event: Event): void {
 /* Time Display */
 .time-section {
   text-align: center;
-  cursor: pointer;
   padding: 1.5rem;
   border-radius: 1rem;
   border: 1px solid var(--surface-border);
   background: var(--surface);
-  margin-bottom: 1.5rem;
-  transition: border-color 0.3s;
-}
-
-.time-section:hover {
-  border-color: rgba(200, 162, 255, 0.15);
+  margin-bottom: 1.25rem;
+  position: relative;
 }
 
 .date-label {
@@ -193,6 +212,32 @@ function handleTimeInput(event: Event): void {
   margin-bottom: 0.75rem;
 }
 
+.time-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.clickable {
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.clickable:hover {
+  color: var(--accent);
+}
+
+.edit-hint {
+  font-size: 0.6rem;
+  opacity: 0.4;
+  margin-left: 0.25rem;
+}
+
+.clickable:hover .edit-hint {
+  opacity: 0.8;
+}
+
 .time-value {
   font-family: 'Orbitron', sans-serif;
   font-size: 1.35rem;
@@ -201,19 +246,85 @@ function handleTimeInput(event: Event): void {
   text-shadow: 0 0 30px var(--accent-glow);
   margin-bottom: 0.5rem;
   line-height: 1.4;
+  cursor: pointer;
 }
 
 .block-info {
-  font-family: 'Inter', monospace;
   font-size: 0.875rem;
   color: var(--text-secondary);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
 .genesis-note {
   font-size: 0.7rem;
   color: var(--text-tertiary);
   letter-spacing: 0.05em;
+}
+
+/* Popup */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.popup-card {
+  background: var(--bg);
+  border: 1px solid var(--surface-border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.popup-card-sm {
+  padding: 1.5rem 2rem;
+}
+
+.popup-close {
+  background: transparent;
+  border: 1px solid rgba(200, 162, 255, 0.25);
+  color: var(--accent);
+  padding: 0.4rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.popup-close:hover {
+  background: rgba(200, 162, 255, 0.08);
+}
+
+/* Time Input */
+.time-input {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  color: var(--text-primary);
+  font-family: 'Orbitron', monospace;
+  font-size: 1.5rem;
+  font-weight: 500;
+  text-align: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  color-scheme: dark;
+}
+
+.time-input::-webkit-calendar-picker-indicator {
+  filter: invert(0.5);
+  cursor: pointer;
+}
+
+.time-input:focus {
+  outline: none;
+  border-color: rgba(200, 162, 255, 0.3);
 }
 
 /* Halving */
@@ -223,7 +334,7 @@ function handleTimeInput(event: Event): void {
   border-radius: 0.75rem;
   border: 1px solid var(--surface-border);
   background: var(--surface);
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .halving-row {
@@ -251,65 +362,6 @@ function handleTimeInput(event: Event): void {
   color: var(--text-tertiary);
   text-align: right;
   margin-top: 0.25rem;
-}
-
-/* Divider */
-.divider {
-  height: 1px;
-  background: var(--surface-border);
-  margin: 1.5rem 0;
-}
-
-/* Picker */
-.picker-section {
-  text-align: center;
-}
-
-.picker-label {
-  font-size: 0.75rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text-tertiary);
-  margin-bottom: 1rem;
-}
-
-.calendar-wrapper {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
-  padding: 1rem;
-  border-radius: 1rem;
-  border: 1px solid var(--surface-border);
-  background: var(--surface);
-}
-
-.time-wrapper {
-  display: flex;
-  justify-content: center;
-}
-
-.time-input {
-  background: var(--surface);
-  border: 1px solid var(--surface-border);
-  color: var(--text-primary);
-  font-family: 'Orbitron', monospace;
-  font-size: 1rem;
-  font-weight: 500;
-  text-align: center;
-  padding: 0.6rem 1.5rem;
-  border-radius: 0.5rem;
-  transition: border-color 0.3s;
-  color-scheme: dark;
-}
-
-.time-input::-webkit-calendar-picker-indicator {
-  filter: invert(0.5);
-  cursor: pointer;
-}
-
-.time-input:focus {
-  outline: none;
-  border-color: rgba(200, 162, 255, 0.3);
 }
 
 /* Footer */
@@ -348,12 +400,7 @@ function handleTimeInput(event: Event): void {
 
 /* Responsive */
 @media (max-width: 640px) {
-  .title {
-    font-size: 1.6rem;
-  }
-
-  .time-value {
-    font-size: 1.15rem;
-  }
+  .title { font-size: 1.6rem; }
+  .time-value { font-size: 1.15rem; }
 }
 </style>
