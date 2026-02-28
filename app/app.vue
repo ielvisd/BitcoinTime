@@ -87,7 +87,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { Analytics } from '@vercel/analytics/vue'
+import { Analytics } from '@vercel/analytics/nuxt'
 import { useBitcoinTime } from '~/composables/useBitcoinTime'
 import { useBlockHeight } from '~/composables/useBlockHeight'
 import { useBtcPrice } from '~/composables/useBtcPrice'
