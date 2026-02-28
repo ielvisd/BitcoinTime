@@ -10,29 +10,30 @@
       />
     </div>
     <div class="glass-card">
-      <div class="flex gap-4 justify-center">
-        <div class="w-24">
-          <label class="block text-sm neon-pink mb-1">Hour</label>
-          <UInputNumber
-            :model-value="hour"
-            :min="0"
-            :max="23"
-            :step="1"
-            placeholder="Hour"
-            class="futuristic-input"
-            @update:model-value="$emit('update:hour', $event)"
+      <div class="flex gap-6 justify-center items-end">
+        <div class="text-center">
+          <label class="block text-sm neon-pink mb-2 font-orbitron">Hour</label>
+          <input
+            type="number"
+            :value="hour"
+            min="0"
+            max="23"
+            step="1"
+            class="neon-time-input"
+            @input="$emit('update:hour', Math.min(23, Math.max(0, Number(($event.target as HTMLInputElement).value))))"
           />
         </div>
-        <div class="w-24">
-          <label class="block text-sm neon-pink mb-1">Minute</label>
-          <UInputNumber
-            :model-value="minute"
-            :min="0"
-            :max="59"
-            :step="1"
-            placeholder="Minute"
-            class="futuristic-input"
-            @update:model-value="$emit('update:minute', $event)"
+        <div class="text-2xl neon-pink font-bold pb-1">:</div>
+        <div class="text-center">
+          <label class="block text-sm neon-pink mb-2 font-orbitron">Minute</label>
+          <input
+            type="number"
+            :value="minute"
+            min="0"
+            max="59"
+            step="1"
+            class="neon-time-input"
+            @input="$emit('update:minute', Math.min(59, Math.max(0, Number(($event.target as HTMLInputElement).value))))"
           />
         </div>
       </div>
