@@ -1,13 +1,8 @@
 <template>
-  <div class="mt-6 flex justify-center">
-    <UButton
-      :label="shareButtonText"
-      icon="i-lucide-share-2"
-      size="lg"
-      variant="outline"
-      class="neon-button-ui"
-      @click="share"
-    />
+  <div class="mt-8 flex justify-center">
+    <button class="share-btn" @click="share">
+      <span>{{ shareButtonText }}</span>
+    </button>
   </div>
 </template>
 
@@ -31,11 +26,7 @@ function share(): void {
   let text: string
 
   if (isBeforeGenesis) {
-    const dateText = jsDate.toLocaleString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
-    })
+    const dateText = jsDate.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     text = `On ${dateText}, it was Year ${decimalYears} before Bitcoin, no blocks yet #bitcointime www.bitcointime.date`
   } else {
     const timeText = isNegative ? `Year ${decimalYears} before Bitcoin` : `Year ${decimalYears} in Bitcoin time`
@@ -44,11 +35,7 @@ function share(): void {
       : 'N/A'
 
     if (props.hasSelectedDate) {
-      const dateText = jsDate.toLocaleString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      })
+      const dateText = jsDate.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
       text = `On ${dateText}, it was ${timeText} at block ${block} #bitcointime www.bitcointime.date`
     } else {
       text = `It is currently ${timeText} at block ${block} #bitcointime www.bitcointime.date`
@@ -56,32 +43,34 @@ function share(): void {
   }
 
   if (navigator.share) {
-    navigator.share({ text }).catch(() => {
-      openTwitter(text)
-    })
+    navigator.share({ text }).catch(() => openTwitter(text))
   } else {
     openTwitter(text)
   }
 }
 
 function openTwitter(text: string): void {
-  const tweetUrl = `https://x.com/intent/tweet?text=${encodeURIComponent(text)}`
-  window.open(tweetUrl, '_blank', 'noopener,noreferrer')
+  window.open(`https://x.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer')
 }
 </script>
 
 <style scoped>
-.neon-button-ui {
-  border-color: var(--neon-pink) !important;
-  color: var(--neon-pink) !important;
-  font-family: 'Orbitron', sans-serif;
-  text-shadow: 0 0 5px var(--neon-pink);
+.share-btn {
+  background: transparent;
+  border: 1px solid rgba(200, 162, 255, 0.25);
+  color: var(--accent);
+  padding: 0.6rem 2rem;
+  border-radius: 0.5rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
   transition: all 0.3s ease;
+  letter-spacing: 0.05em;
 }
 
-.neon-button-ui:hover {
-  background: rgba(255, 0, 128, 0.2) !important;
-  box-shadow: 0 0 15px var(--neon-pink);
-  transform: scale(1.05);
+.share-btn:hover {
+  background: rgba(200, 162, 255, 0.06);
+  border-color: rgba(200, 162, 255, 0.4);
 }
 </style>

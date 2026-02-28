@@ -35,10 +35,11 @@
           :has-selected-date="selectedDate !== null"
         />
 
-        <PriceTicker :price="price" :loading="priceLoading" />
-
-        <div class="mt-4 text-center text-xs" style="color: var(--text-tertiary);">
-          Powered by <a href="https://www.whatsonchain.com" target="_blank" rel="noopener noreferrer" class="underline" style="color: var(--text-secondary);">Whatsonchain</a>
+        <div class="mt-8 pt-6" style="border-top: 1px solid var(--surface-border);">
+          <PriceTicker :price="price" :loading="priceLoading" />
+          <div class="mt-3 text-center text-xs" style="color: var(--text-tertiary);">
+            Powered by <a href="https://www.whatsonchain.com" target="_blank" rel="noopener noreferrer" class="underline" style="color: var(--text-secondary);">Whatsonchain</a>
+          </div>
         </div>
       </div>
     </div>
