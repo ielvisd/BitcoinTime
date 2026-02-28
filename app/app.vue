@@ -10,11 +10,16 @@
 
         <!-- Main Display -->
         <section class="time-section">
-          <!-- Clickable date -->
-          <p class="date-label clickable" @click="showCalendar = !showCalendar">
-            {{ formattedDate.split(',').slice(0, -1).join(',') }}
-            <span class="edit-hint">▾</span>
-          </p>
+          <!-- Date & Time row -->
+          <div class="datetime-row">
+            <span class="date-label clickable" @click="showCalendar = !showCalendar">
+              {{ formattedDate.split(',').slice(0, -1).join(',') }} <span class="edit-hint">▾</span>
+            </span>
+            <span class="datetime-sep">·</span>
+            <span class="date-label clickable" @click="showTimePicker = !showTimePicker">
+              {{ formattedTime }} <span class="edit-hint">▾</span>
+            </span>
+          </div>
 
           <!-- Calendar popup -->
           <div v-if="showCalendar" class="popup-overlay" @click.self="showCalendar = false">
@@ -28,22 +33,6 @@
             </div>
           </div>
 
-          <p class="time-value" @click="cycleDisplayMode">{{ bitcoinTimeText }}</p>
-
-          <p class="block-info">
-            <template v-if="displayBlockHeight !== null">
-              Block {{ displayBlockHeight === 0 ? '0' : displayBlockHeight.toLocaleString() }}
-            </template>
-            <template v-else-if="bitcoinTime.isBeforeGenesis">No blocks yet</template>
-            <template v-else>Block unavailable</template>
-          </p>
-
-          <!-- Clickable time -->
-          <p class="time-label clickable" @click="showTimePicker = !showTimePicker">
-            {{ formattedTime }}
-            <span class="edit-hint">▾</span>
-          </p>
-
           <!-- Time popup -->
           <div v-if="showTimePicker" class="popup-overlay" @click.self="showTimePicker = false">
             <div class="popup-card popup-card-sm">
@@ -56,6 +45,16 @@
               <button class="popup-close" @click="showTimePicker = false">Done</button>
             </div>
           </div>
+
+          <p class="time-value" @click="cycleDisplayMode">{{ bitcoinTimeText }}</p>
+
+          <p class="block-info">
+            <template v-if="displayBlockHeight !== null">
+              Block {{ displayBlockHeight === 0 ? '0' : displayBlockHeight.toLocaleString() }}
+            </template>
+            <template v-else-if="bitcoinTime.isBeforeGenesis">No blocks yet</template>
+            <template v-else>Block unavailable</template>
+          </p>
 
           <p class="genesis-note">Since Genesis · Jan 3, 2009</p>
         </section>
@@ -204,19 +203,24 @@ function handleTimeInput(event: Event): void {
   position: relative;
 }
 
-.date-label {
-  font-size: 0.75rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--text-secondary);
+.datetime-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
   margin-bottom: 0.75rem;
 }
 
-.time-label {
-  font-size: 0.8rem;
+.datetime-sep {
+  color: var(--text-tertiary);
+  font-size: 0.75rem;
+}
+
+.date-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--text-secondary);
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
 }
 
 .clickable {
