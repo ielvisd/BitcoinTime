@@ -5,6 +5,7 @@
       <div class="app-container">
         <!-- Header -->
         <header class="app-header">
+          <img src="/logo-square.jpg" alt="Bitcoin Time" class="app-logo" @click="handleReset" />
           <h1 class="title" @click="handleReset">Bitcoin Time</h1>
         </header>
 
@@ -186,6 +187,22 @@ function handleTimeInput(event: Event): void {
 .app-header {
   text-align: center;
   margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.app-logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.app-logo:hover {
+  transform: scale(1.05);
 }
 
 .title {

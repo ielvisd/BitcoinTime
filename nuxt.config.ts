@@ -10,6 +10,15 @@ export default defineNuxtConfig({
       htmlAttrs: { lang: 'en' },
       link: [
         {
+          rel: 'icon',
+          type: 'image/jpeg',
+          href: '/favicon.ico',
+        },
+        {
+          rel: 'apple-touch-icon',
+          href: '/apple-touch-icon.jpg',
+        },
+        {
           rel: 'preconnect',
           href: 'https://fonts.googleapis.com',
         },
@@ -63,19 +72,19 @@ export default defineNuxtConfig({
       display: 'standalone',
       icons: [
         {
-          src: '/pwa-192x192.png',
+          src: '/icon-192.jpg',
           sizes: '192x192',
-          type: 'image/png',
+          type: 'image/jpeg',
         },
         {
-          src: '/pwa-512x512.png',
+          src: '/icon-512.jpg',
           sizes: '512x512',
-          type: 'image/png',
+          type: 'image/jpeg',
         },
         {
-          src: '/pwa-512x512.png',
+          src: '/icon-512.jpg',
           sizes: '512x512',
-          type: 'image/png',
+          type: 'image/jpeg',
           purpose: 'any maskable',
         },
       ],
