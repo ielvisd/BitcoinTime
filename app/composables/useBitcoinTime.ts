@@ -6,7 +6,7 @@ export const GENESIS_TIMESTAMP = 1231006505 // Jan 3, 2009, 18:15:05 UTC
 
 export type DisplayMode = 'breakdown' | 'years' | 'months' | 'weeks' | 'days' | 'hours' | 'minutes' | 'seconds'
 
-export const DISPLAY_MODES: DisplayMode[] = ['breakdown', 'years', 'months', 'weeks', 'days', 'hours', 'minutes', 'seconds']
+export const DISPLAY_MODES: DisplayMode[] = ['seconds', 'breakdown', 'years', 'months', 'weeks', 'days', 'hours', 'minutes']
 
 export interface BitcoinTimeData {
   years: number
@@ -116,7 +116,7 @@ export function useBitcoinTime(): UseBitcoinTimeReturn {
       case 'minutes':
         return `${prefix}${minutes} minutes`
       case 'seconds':
-        return `${prefix}${seconds} seconds`
+        return `${prefix}${seconds.toLocaleString()} seconds`
       default:
         return ''
     }
