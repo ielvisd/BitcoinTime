@@ -70,13 +70,17 @@
 
         <!-- Footer -->
         <footer class="app-footer">
-          <ShareButton
-            :bitcoin-time="bitcoinTime"
-            :display-block-height="displayBlockHeight"
-            :has-selected-date="selectedDate !== null"
-          />
+          <div class="footer-actions">
+            <ShareButton
+              :bitcoin-time="bitcoinTime"
+              :display-block-height="displayBlockHeight"
+              :has-selected-date="selectedDate !== null"
+            />
+            <TipJar />
+          </div>
           <div class="footer-meta">
             <span v-if="!priceLoading && price !== null" class="bsv-price">BSV ${{ price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</span>
+            <BuyBsvLink />
             <span class="powered-by">Powered by <a href="https://www.whatsonchain.com" target="_blank" rel="noopener noreferrer">Whatsonchain</a></span>
           </div>
         </footer>
@@ -376,6 +380,12 @@ function handleTimeInput(event: Event): void {
   flex-direction: column;
   align-items: center;
   gap: 1.25rem;
+}
+
+.footer-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
 }
 
 .footer-meta {
