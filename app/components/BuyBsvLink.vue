@@ -14,7 +14,7 @@
 <script setup lang="ts">
 // ChangeNOW affiliate link — replace YOUR_REFERRAL_ID with actual ID after signup
 // Sign up at: https://changenow.io/affiliate
-const affiliateUrl = 'https://changenow.io/exchange?to=bsv&link_id=YOUR_REFERRAL_ID'
+const affiliateUrl = 'https://changenow.io/exchange?to=bsv&link_id=97f922a59f5865de7898cbb4bff4e812d274170277b693a28b0f9278b3b807bc'
 </script>
 
 <style scoped>
