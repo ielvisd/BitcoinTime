@@ -7,30 +7,27 @@
     <div v-if="showTip" class="popup-overlay" @click.self="showTip = false">
       <div class="popup-card">
         <p class="tip-title">Support Bitcoin Time</p>
-        <p class="tip-desc">Send a tip via BSV</p>
+        <p class="tip-desc">Scan with any BSV wallet</p>
 
-        <div v-if="paymail" class="tip-paymail">
-          <p class="paymail-label">Paymail</p>
-          <button class="paymail-value" @click="copyPaymail">
-            {{ copied ? 'Copied!' : paymail }}
-          </button>
+        <!-- QR Code -->
+        <div class="qr-container">
+          <img
+            :src="qrUrl"
+            alt="BSV tip address QR code"
+            width="180"
+            height="180"
+            class="qr-image"
+          />
         </div>
 
-        <div v-if="bsvAddress" class="tip-address">
-          <p class="paymail-label">Or send to address</p>
-          <button class="address-value" @click="copyAddress">
-            {{ addressCopied ? 'Copied!' : truncatedAddress }}
-          </button>
-        </div>
+        <!-- Tap to copy address -->
+        <button class="address-btn" @click="copyAddress">
+          {{ addressCopied ? '✓ Copied!' : truncatedAddress }}
+        </button>
 
-        <a
-          v-if="handcashUrl"
-          :href="handcashUrl"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="handcash-btn"
-        >
-          Open in HandCash
+        <!-- Open in wallet (mobile) -->
+        <a :href="walletUri" class="wallet-btn">
+          Open in Wallet
         </a>
 
         <button class="close-btn" @click="showTip = false">Close</button>
@@ -43,27 +40,19 @@
 import { ref, computed } from 'vue'
 
 const showTip = ref(false)
-const copied = ref(false)
 const addressCopied = ref(false)
 
-// TODO: Replace with your actual paymail and BSV address
-const paymail = ''
 const bsvAddress = '1HRFFQD1ATHZXiCkHhMu1K66aLcYeNPFmc'
-const handcashUrl = ''
+
+// QR code via free API — encodes a bitcoin: URI
+const walletUri = `bitcoin:${bsvAddress}?sv&label=BitcoinTime%20Tip`
+const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(walletUri)}&bgcolor=0a0a0f&color=c8a2ff&format=png`
 
 const truncatedAddress = computed(() => {
-  if (!bsvAddress) return ''
-  return `${bsvAddress.slice(0, 8)}...${bsvAddress.slice(-8)}`
+  return `${bsvAddress.slice(0, 10)}...${bsvAddress.slice(-8)}`
 })
 
-async function copyPaymail() {
-  await navigator.clipboard.writeText(paymail)
-  copied.value = true
-  setTimeout(() => { copied.value = false }, 2000)
-}
-
 async function copyAddress() {
-  if (!bsvAddress) return
   await navigator.clipboard.writeText(bsvAddress)
   addressCopied.value = true
   setTimeout(() => { addressCopied.value = false }, 2000)
@@ -94,7 +83,7 @@ async function copyAddress() {
 .popup-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -107,7 +96,7 @@ async function copyAddress() {
   border: 1px solid var(--surface-border);
   border-radius: 1rem;
   padding: 2rem;
-  max-width: 320px;
+  max-width: 300px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -117,34 +106,33 @@ async function copyAddress() {
 
 .tip-title {
   font-family: 'Orbitron', sans-serif;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: var(--text-primary);
 }
 
 .tip-desc {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
 }
 
-.tip-paymail, .tip-address {
-  width: 100%;
-  text-align: center;
+.qr-container {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  margin: 0.25rem 0;
 }
 
-.paymail-label {
-  font-size: 0.65rem;
-  color: var(--text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 0.25rem;
+.qr-image {
+  display: block;
+  border-radius: 0.25rem;
 }
 
-.paymail-value, .address-value {
+.address-btn {
   background: var(--surface);
   border: 1px solid var(--surface-border);
   color: var(--accent);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   cursor: pointer;
@@ -153,11 +141,11 @@ async function copyAddress() {
   font-family: 'Inter', monospace;
 }
 
-.paymail-value:hover, .address-value:hover {
+.address-btn:hover {
   border-color: rgba(200, 162, 255, 0.3);
 }
 
-.handcash-btn {
+.wallet-btn {
   background: rgba(200, 162, 255, 0.08);
   border: 1px solid rgba(200, 162, 255, 0.25);
   color: var(--accent);
@@ -170,7 +158,7 @@ async function copyAddress() {
   text-align: center;
 }
 
-.handcash-btn:hover {
+.wallet-btn:hover {
   background: rgba(200, 162, 255, 0.15);
 }
 
@@ -182,6 +170,6 @@ async function copyAddress() {
   border-radius: 0.5rem;
   font-size: 0.75rem;
   cursor: pointer;
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
 }
 </style>
