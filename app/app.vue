@@ -14,7 +14,7 @@
           <!-- Date & Time row -->
           <div class="datetime-row">
             <span class="date-label clickable" @click="showCalendar = !showCalendar">
-              {{ formattedDate.split(',').slice(0, -1).join(',') }}
+              {{ shortDate }}
             </span>
             <span class="datetime-sep">·</span>
             <span class="date-label clickable" @click="showTimePicker = !showTimePicker">
@@ -124,6 +124,16 @@ const {
 
 const { price, loading: priceLoading } = useBtcPrice()
 
+const shortDate = computed(() => {
+  const { jsDate } = bitcoinTime.value
+  return jsDate.toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  }).toUpperCase()
+})
+
 const formattedTime = computed(() => {
   const h = selectedHour.value
   const m = selectedMinute.value
@@ -181,12 +191,14 @@ function handleTimeInput(event: Event): void {
 .app-container {
   width: 100%;
   max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 /* Header */
 .app-header {
   text-align: center;
-  margin-bottom: 1.25rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -221,7 +233,6 @@ function handleTimeInput(event: Event): void {
   border-radius: 1rem;
   border: 1px solid var(--surface-border);
   background: var(--surface);
-  margin-bottom: 1.25rem;
   position: relative;
 }
 
@@ -360,7 +371,6 @@ function handleTimeInput(event: Event): void {
   border-radius: 0.75rem;
   border: 1px solid var(--surface-border);
   background: var(--surface);
-  margin-bottom: 2rem;
 }
 
 .halving-row {
