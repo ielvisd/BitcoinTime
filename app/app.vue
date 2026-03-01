@@ -82,7 +82,7 @@
           <div class="footer-meta">
             <span v-if="!priceLoading && price !== null" class="bsv-price">BSV ${{ price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</span>
             <BuyBsvLink />
-            <span class="powered-by">Powered by <a href="https://www.whatsonchain.com" target="_blank" rel="noopener noreferrer">Whatsonchain</a></span>
+            <span class="powered-by"><a href="/embed.html">Embed</a> · Powered by <a href="https://www.whatsonchain.com" target="_blank" rel="noopener noreferrer">Whatsonchain</a></span>
           </div>
         </footer>
       </div>
