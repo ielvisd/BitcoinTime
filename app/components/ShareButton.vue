@@ -1,7 +1,7 @@
 <template>
-  <div class="mt-8 flex justify-center">
+  <div class="share-wrapper">
     <button class="share-btn" @click="share">
-      <span>{{ shareButtonText }}</span>
+      {{ shareButtonText }}
     </button>
   </div>
 </template>
@@ -55,22 +55,24 @@ function openTwitter(text: string): void {
 </script>
 
 <style scoped>
+.share-wrapper {
+  width: 100%;
+}
+
 .share-btn {
   background: transparent;
-  border: 1px solid rgba(255, 79, 254, 0.25);
-  color: var(--accent);
-  padding: 0.6rem 2rem;
+  border: 1px solid rgba(255, 79, 254, 0.15);
+  color: var(--text-secondary);
+  padding: 0.4rem 0;
   border-radius: 0.5rem;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-size: 0.8rem;
   cursor: pointer;
-  transition: all 0.3s ease;
-  letter-spacing: 0.05em;
+  transition: all 0.2s;
+  width: 100%;
 }
 
 .share-btn:hover {
-  background: rgba(255, 79, 254, 0.06);
-  border-color: rgba(255, 79, 254, 0.4);
+  border-color: rgba(255, 79, 254, 0.3);
+  color: var(--accent);
 }
 </style>

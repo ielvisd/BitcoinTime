@@ -61,18 +61,19 @@ async function copyAddress() {
 
 <style scoped>
 .tip-jar {
-  text-align: center;
+  width: 100%;
 }
 
 .tip-btn {
   background: transparent;
   border: 1px solid rgba(255, 79, 254, 0.15);
   color: var(--text-secondary);
-  padding: 0.4rem 1.25rem;
+  padding: 0.4rem 0;
   border-radius: 0.5rem;
   font-size: 0.8rem;
   cursor: pointer;
   transition: all 0.2s;
+  width: 100%;
 }
 
 .tip-btn:hover {

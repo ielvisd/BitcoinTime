@@ -77,11 +77,16 @@
               :display-block-height="displayBlockHeight"
               :has-selected-date="selectedDate !== null"
             />
+            <a
+              :href="buyBsvUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="action-btn"
+            >Buy BSV</a>
             <TipJar />
           </div>
           <div class="footer-meta">
             <span v-if="!priceLoading && price !== null" class="bsv-price">BSV ${{ price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) }}</span>
-            <BuyBsvLink />
             <span class="powered-by"><a href="/embed.html">Embed</a> · Powered by <a href="https://www.whatsonchain.com" target="_blank" rel="noopener noreferrer">Whatsonchain</a></span>
           </div>
         </footer>
@@ -123,6 +128,8 @@ const {
 } = useBlockHeight(bitcoinTime, selectedDate)
 
 const { price, loading: priceLoading } = useBtcPrice()
+
+const buyBsvUrl = 'https://changenow.io/exchange?to=bsv&link_id=97f922a59f5865de7898cbb4bff4e812d274170277b693a28b0f9278b3b807bc'
 
 const shortDate = computed(() => {
   const { jsDate } = bitcoinTime.value
@@ -411,8 +418,32 @@ function handleTimeInput(event: Event): void {
 
 .footer-actions {
   display: flex;
-  gap: 0.75rem;
+  gap: 0.5rem;
   align-items: center;
+  width: 100%;
+}
+
+.footer-actions > *,
+.footer-actions > .action-btn {
+  flex: 1;
+  text-align: center;
+}
+
+.action-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 79, 254, 0.15);
+  color: var(--text-secondary);
+  padding: 0.4rem 0;
+  border-radius: 0.5rem;
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: all 0.2s;
+  display: block;
+}
+
+.action-btn:hover {
+  border-color: rgba(255, 79, 254, 0.3);
+  color: var(--accent);
 }
 
 .footer-meta {
