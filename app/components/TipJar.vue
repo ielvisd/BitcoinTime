@@ -9,7 +9,7 @@
         <p class="tip-title">Support Bitcoin Time</p>
         <p class="tip-desc">Send a tip via BSV</p>
 
-        <div class="tip-paymail">
+        <div v-if="paymail" class="tip-paymail">
           <p class="paymail-label">Paymail</p>
           <button class="paymail-value" @click="copyPaymail">
             {{ copied ? 'Copied!' : paymail }}
@@ -47,9 +47,9 @@ const copied = ref(false)
 const addressCopied = ref(false)
 
 // TODO: Replace with your actual paymail and BSV address
-const paymail = 'elvis@handcash.io'  // Replace with your HandCash paymail
-const bsvAddress = ''  // Optional: your BSV address
-const handcashUrl = paymail ? `https://app.handcash.io/#/send?to=${paymail}` : ''
+const paymail = ''
+const bsvAddress = '1HRFFQD1ATHZXiCkHhMu1K66aLcYeNPFmc'
+const handcashUrl = ''
 
 const truncatedAddress = computed(() => {
   if (!bsvAddress) return ''
