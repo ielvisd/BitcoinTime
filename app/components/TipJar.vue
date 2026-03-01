@@ -66,7 +66,7 @@ async function copyAddress() {
 
 .tip-btn {
   background: transparent;
-  border: 1px solid rgba(200, 162, 255, 0.15);
+  border: 1px solid rgba(255, 79, 254, 0.15);
   color: var(--text-secondary);
   padding: 0.4rem 1.25rem;
   border-radius: 0.5rem;
@@ -76,7 +76,7 @@ async function copyAddress() {
 }
 
 .tip-btn:hover {
-  border-color: rgba(200, 162, 255, 0.3);
+  border-color: rgba(255, 79, 254, 0.3);
   color: var(--accent);
 }
 
@@ -142,12 +142,12 @@ async function copyAddress() {
 }
 
 .address-btn:hover {
-  border-color: rgba(200, 162, 255, 0.3);
+  border-color: rgba(255, 79, 254, 0.3);
 }
 
 .wallet-btn {
-  background: rgba(200, 162, 255, 0.08);
-  border: 1px solid rgba(200, 162, 255, 0.25);
+  background: rgba(255, 79, 254, 0.08);
+  border: 1px solid rgba(255, 79, 254, 0.25);
   color: var(--accent);
   padding: 0.5rem 1.5rem;
   border-radius: 0.5rem;
@@ -159,7 +159,7 @@ async function copyAddress() {
 }
 
 .wallet-btn:hover {
-  background: rgba(200, 162, 255, 0.15);
+  background: rgba(255, 79, 254, 0.15);
 }
 
 .close-btn {

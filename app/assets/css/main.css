@@ -4,8 +4,8 @@
 
 /* ── Design System ── */
 :root {
-  --accent: #c8a2ff;          /* soft violet */
-  --accent-glow: rgba(200, 162, 255, 0.3);
+  --accent: #FF4FFE;          /* hot pink */
+  --accent-glow: rgba(255, 79, 254, 0.3);
   --text-primary: #f0eef5;
   --text-secondary: rgba(240, 238, 245, 0.6);
   --text-tertiary: rgba(240, 238, 245, 0.4);
@@ -41,8 +41,8 @@ body {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at 50% 0%, rgba(200, 162, 255, 0.04) 0%, transparent 60%),
-    radial-gradient(ellipse at 50% 100%, rgba(200, 162, 255, 0.02) 0%, transparent 50%);
+    radial-gradient(ellipse at 50% 0%, rgba(255, 79, 254, 0.05) 0%, transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgba(255, 79, 254, 0.02) 0%, transparent 50%);
   z-index: 1;
 }
 
@@ -97,8 +97,8 @@ h1 {
 }
 
 .glow-border:hover {
-  border: 1px solid rgba(200, 162, 255, 0.15);
-  box-shadow: 0 0 30px rgba(200, 162, 255, 0.05);
+  border: 1px solid rgba(255, 79, 254, 0.15);
+  box-shadow: 0 0 30px rgba(255, 79, 254, 0.05);
 }
 
 /* ── Pulse ── */
@@ -114,7 +114,7 @@ h1 {
 /* ── Button ── */
 .neon-button {
   background: transparent;
-  border: 1px solid rgba(200, 162, 255, 0.3);
+  border: 1px solid rgba(255, 79, 254, 0.3);
   color: var(--accent);
   padding: 0.6rem 1.5rem;
   border-radius: 0.5rem;
@@ -127,14 +127,14 @@ h1 {
 }
 
 .neon-button:hover {
-  background: rgba(200, 162, 255, 0.08);
-  border-color: rgba(200, 162, 255, 0.5);
-  box-shadow: 0 0 20px rgba(200, 162, 255, 0.1);
+  background: rgba(255, 79, 254, 0.08);
+  border-color: rgba(255, 79, 254, 0.5);
+  box-shadow: 0 0 20px rgba(255, 79, 254, 0.1);
 }
 
 .neon-button:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(200, 162, 255, 0.2);
+  box-shadow: 0 0 0 2px rgba(255, 79, 254, 0.2);
 }
 
 /* ── Calendar ── */
@@ -167,8 +167,8 @@ h1 {
 
 .neon-time-input:focus {
   outline: none;
-  border-color: rgba(200, 162, 255, 0.3);
-  box-shadow: 0 0 20px rgba(200, 162, 255, 0.08);
+  border-color: rgba(255, 79, 254, 0.3);
+  box-shadow: 0 0 20px rgba(255, 79, 254, 0.08);
 }
 
 /* ── General Input ── */
@@ -184,7 +184,7 @@ h1 {
 
 .futuristic-input:focus {
   outline: none;
-  border-color: rgba(200, 162, 255, 0.3);
+  border-color: rgba(255, 79, 254, 0.3);
 }
 
 /* ── Input Group ── */

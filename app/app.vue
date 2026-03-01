@@ -299,7 +299,7 @@ function handleTimeInput(event: Event): void {
 
 .popup-close {
   background: transparent;
-  border: 1px solid rgba(200, 162, 255, 0.25);
+  border: 1px solid rgba(255, 79, 254, 0.25);
   color: var(--accent);
   padding: 0.4rem 1.5rem;
   border-radius: 0.5rem;
@@ -309,7 +309,7 @@ function handleTimeInput(event: Event): void {
 }
 
 .popup-close:hover {
-  background: rgba(200, 162, 255, 0.08);
+  background: rgba(255, 79, 254, 0.08);
 }
 
 /* Time Input */
@@ -333,7 +333,7 @@ function handleTimeInput(event: Event): void {
 
 .time-input:focus {
   outline: none;
-  border-color: rgba(200, 162, 255, 0.3);
+  border-color: rgba(255, 79, 254, 0.3);
 }
 
 /* Halving */

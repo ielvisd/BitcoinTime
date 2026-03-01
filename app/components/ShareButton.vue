@@ -57,7 +57,7 @@ function openTwitter(text: string): void {
 <style scoped>
 .share-btn {
   background: transparent;
-  border: 1px solid rgba(200, 162, 255, 0.25);
+  border: 1px solid rgba(255, 79, 254, 0.25);
   color: var(--accent);
   padding: 0.6rem 2rem;
   border-radius: 0.5rem;
@@ -70,7 +70,7 @@ function openTwitter(text: string): void {
 }
 
 .share-btn:hover {
-  background: rgba(200, 162, 255, 0.06);
-  border-color: rgba(200, 162, 255, 0.4);
+  background: rgba(255, 79, 254, 0.06);
+  border-color: rgba(255, 79, 254, 0.4);
 }
 </style>
